@@ -8,18 +8,24 @@ public class drawing_line : MonoBehaviour {
     public Text obj2;
     private Vector2 Mouse;
     private bool state;
+    private int counts;
+
+    public LineRenderer rend;
 
     Vector3 start = new Vector3(100, 100, 0);
     Vector3 end = new Vector3(-100, -100, 0);
 
-    LineRenderer lr;
 
     // Use this for initialization
     void Start () {
         state = false;
-        lr = GetComponent<LineRenderer>();
-        SetLine(start, end);
         obj2.text = "off";
+
+        counts = 0;
+        rend = GetComponent<LineRenderer>();
+
+        rend.enabled = false;
+
     }
 	
 	// Update is called once per frame
@@ -29,25 +35,22 @@ public class drawing_line : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             state = true;
+            rend.enabled = true;
+            
+
             Mouse = Input.mousePosition;
             start.x = Mouse.x;
             start.y = Mouse.y;
-            //SetLine(start, start);
-            obj2.text = "start:("+start.x+","+start.y+"), end:(" + end.x + "," + end.y + ")";
+        
         }
         if (Input.GetMouseButton(0))
         {
-            Mouse = Input.mousePosition;
-            end.x = Mouse.x;
-            end.y = Mouse.y;
-            //SetLine(start, end);
-            obj2.text = "start:(" + start.x + "," + start.y + "), end:(" + end.x + "," + end.y + ")";
+            
         }
         if (Input.GetMouseButtonUp(0))
         {
             state = false;
-            obj2.text = "start:(" + start.x + "," + start.y + "), end:(" + end.x + "," + end.y + ")";
-            //SetLine(start, end);
+            rend.enabled = false;
         }
 
 
@@ -55,8 +58,7 @@ public class drawing_line : MonoBehaviour {
 
     void SetLine(Vector3 start, Vector3 end)
     {
-        lr.SetPosition(0, start);
-        lr.SetPosition(1, end);
-        lr.SetWidth(0.1f, 0.1f);
+        rend.SetPosition(0, start);
+        rend.SetPosition(1, end);
     }
 }
