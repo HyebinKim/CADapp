@@ -53,8 +53,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\move_xy.cs" />
      <Compile Include="Assets\Scripts\Cursor.cs" />
      <Compile Include="Assets\Scripts\drawing_line.cs" />
+     <Compile Include="Assets\Scripts\drawing_plane.cs" />
+     <Compile Include="Assets\Scripts\drawing_square.cs" />
+     <Compile Include="Assets\Scripts\move_to_xysketch.cs" />
+     <Compile Include="Assets\Scripts\select_color.cs" />
      <Compile Include="Assets\Scripts\State.cs" />
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>C:/Users/helen/Desktop/CADapp/CADapp/CADapp_Unity/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
