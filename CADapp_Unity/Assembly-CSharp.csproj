@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Cursor.cs" />
-     <Compile Include="Assets\Scripts\draw_rec.cs" />
+     <Compile Include="Assets\Scripts\draw_sketch.cs" />
      <Compile Include="Assets\Scripts\drawing_circle.cs" />
      <Compile Include="Assets\Scripts\drawing_line.cs" />
      <Compile Include="Assets\Scripts\drawing_plane.cs" />
