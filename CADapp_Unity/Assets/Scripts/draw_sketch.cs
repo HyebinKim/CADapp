@@ -18,7 +18,7 @@ public class draw_sketch : MonoBehaviour {
     Vector3 end = new Vector3(1, 1, 0);
     Vector3[] positions;
 
-    public int segments = 18; //circle segments
+    public int segments = 60; //circle segments
 
     public Text ToWorld;
 
@@ -43,7 +43,8 @@ public class draw_sketch : MonoBehaviour {
         v3.z = 0.0f;
 
         ToWorld.text = "x="+v3.x +"y="+ v3.y +"!!";
-        
+
+        //LineRenderer rend = GetComponent<LineRenderer>();
 
         switch (mode)
         {
@@ -112,8 +113,16 @@ public class draw_sketch : MonoBehaviour {
                 break;
             case 2://circle
 
-                /*
-                 positions = new Vector3[18];
+                LineRenderer rend2 = GetComponent<LineRenderer>();
+                rend2.material = new Material(Shader.Find("Particles/Additive"));
+
+                rend2.startColor = c1;
+                rend2.endColor = c1;
+                rend2.startWidth = 0.1f;
+                rend2.endWidth = 0.1f;
+
+                positions = new Vector3[segments];
+                rend2.loop = true;
 
                 float xradius = 3.0f;
                 float yradius = 3.0f;
@@ -122,9 +131,9 @@ public class draw_sketch : MonoBehaviour {
                 float y;
                 float z = 0f;
 
-                float angle = 20f;
+                float angle = 0.0f;
 
-                for (int i = 0; i < (segments + 1); i++)
+                for (int i = 0; i < (segments); i++)
                 {
                     x = Mathf.Sin(Mathf.Deg2Rad * angle) * xradius;
                     y = Mathf.Cos(Mathf.Deg2Rad * angle) * yradius;
@@ -134,11 +143,8 @@ public class draw_sketch : MonoBehaviour {
                     angle += (360f / segments);
                 }
 
-                rend.positionCount = positions.Length;
-                rend.SetPositions(positions);
-                 
-                 */
-
+                rend2.positionCount = positions.Length;
+                rend2.SetPositions(positions);
 
 
                 break;
