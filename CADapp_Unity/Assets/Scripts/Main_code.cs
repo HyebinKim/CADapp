@@ -22,6 +22,7 @@ public class Main_code : MonoBehaviour {
     // 0: main display
     // 1: selection mode
     // 2: sketch mode
+    // 3; solid mode
     public int s_mode;
     // 1-0: not selected
     // 1-1: plane selection
@@ -31,8 +32,18 @@ public class Main_code : MonoBehaviour {
     // 2-1: rectangle
     // 2-2: circle
 
+    // 3-0: not operable
+    // 3-1: extrusion
+    // 3-2: cut extrusion
+   
+
+    // Button object
     public GameObject rectangle;
     public GameObject circle;
+    public GameObject b_sketch;
+    public GameObject b_main;
+    public GameObject b_solid;
+    public GameObject b_extrusion;
 
     //data structure//
     //plane
@@ -55,6 +66,7 @@ public class Main_code : MonoBehaviour {
 
         rectangle.SetActive(false);
         circle.SetActive(false);
+        b_main.SetActive(false);
 
         //xy, yz, zx plane definition
         xy.point = new Vector3(0, 0, 0); xy.normal = new Vector3(0, 0, 1);
@@ -70,6 +82,13 @@ public class Main_code : MonoBehaviour {
         switch (m_mode)
         {
             case 0:
+                b_sketch.SetActive(true);
+                b_solid.SetActive(true);
+
+                b_main.SetActive(false);
+                rectangle.SetActive(false);
+                circle.SetActive(false);
+                b_extrusion.SetActive(false);
                 break;
 
             case 1:
@@ -79,8 +98,19 @@ public class Main_code : MonoBehaviour {
                 //sketch button display
                 rectangle.SetActive(true);
                 circle.SetActive(true);
+                b_main.SetActive(true);
 
+                b_sketch.SetActive(false);
+                b_solid.SetActive(false);
 
+                break;
+
+            case 3:
+                b_main.SetActive(true);
+                b_extrusion.SetActive(true);
+
+                b_solid.SetActive(false);
+                b_sketch.SetActive(false);
 
                 break;
 

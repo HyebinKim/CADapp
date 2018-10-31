@@ -22,12 +22,13 @@ public class draw_sketch : MonoBehaviour {
 
     public Text ToWorld;
 
-
+    Main_code feature_info;
 
     // Use this for initialization
     void Start () {
         
         mode = 0;
+        feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
     }
 	
 	// Update is called once per frame
@@ -108,6 +109,11 @@ public class draw_sketch : MonoBehaviour {
 
                     rend.positionCount = positions.Length;
                     rend.SetPositions(positions);
+
+                    for (int i=0; i < 4; i++)
+                    {
+                        feature_info.rec[i] = positions[i];
+                    }
                 }
 
                 break;
@@ -145,6 +151,8 @@ public class draw_sketch : MonoBehaviour {
 
                 rend2.positionCount = positions.Length;
                 rend2.SetPositions(positions);
+
+                
 
 
                 break;
