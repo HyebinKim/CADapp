@@ -31,6 +31,7 @@ public class Main_code : MonoBehaviour {
     // 2-0: not operable
     // 2-1: rectangle
     // 2-2: circle
+    // 2-3: polygon
 
     // 3-0: not operable
     // 3-1: extrusion
@@ -40,10 +41,17 @@ public class Main_code : MonoBehaviour {
     // Button object
     public GameObject rectangle;
     public GameObject circle;
+    public GameObject poly;
+    public GameObject reset;
+
     public GameObject b_sketch;
     public GameObject b_main;
     public GameObject b_solid;
     public GameObject b_extrusion;
+
+    //state
+    public int s_feature;
+
 
     //data structure//
     //plane
@@ -66,6 +74,8 @@ public class Main_code : MonoBehaviour {
 
         rectangle.SetActive(false);
         circle.SetActive(false);
+        poly.SetActive(false);
+        reset.SetActive(false);
         b_main.SetActive(false);
 
         //xy, yz, zx plane definition
@@ -73,6 +83,7 @@ public class Main_code : MonoBehaviour {
         yz.point = new Vector3(0, 0, 0); yz.normal = new Vector3(1, 0, 0);
         zx.point = new Vector3(0, 0, 0); zx.normal = new Vector3(0, 1, 0);
 
+        s_feature = 0;
 
     }
 	
@@ -88,6 +99,8 @@ public class Main_code : MonoBehaviour {
                 b_main.SetActive(false);
                 rectangle.SetActive(false);
                 circle.SetActive(false);
+                poly.SetActive(false);
+                reset.SetActive(false);
                 b_extrusion.SetActive(false);
                 break;
 
@@ -98,6 +111,8 @@ public class Main_code : MonoBehaviour {
                 //sketch button display
                 rectangle.SetActive(true);
                 circle.SetActive(true);
+                poly.SetActive(true);
+                reset.SetActive(true);
                 b_main.SetActive(true);
 
                 b_sketch.SetActive(false);
