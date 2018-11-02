@@ -166,3 +166,5 @@ C:\Users\helen\Desktop\CADapp\CADapp\CADapp_Unity\obj\Debug\Assembly-CSharp.cspr
 C:\Users\helen\Desktop\CADapp\CADapp\CADapp_Unity\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 C:\Users\helen\Desktop\CADapp\CADapp\CADapp_Unity\obj\Debug\Assembly-CSharp.dll
 C:\Users\helen\Desktop\CADapp\CADapp\CADapp_Unity\obj\Debug\Assembly-CSharp.pdb
+C:\Users\helen\Desktop\CADapp\CADapp\CADapp_Unity\Temp\bin\Debug\UnityEngine.SpatialTrackingModule.dll
+C:\Users\helen\Desktop\CADapp\CADapp\CADapp_Unity\Temp\bin\Debug\UnityEngine.SpatialTrackingModule.xml

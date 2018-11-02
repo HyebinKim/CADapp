@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class draw_sketch : MonoBehaviour {
 
-    public int mode = 0;
     // mode 0: not select
     // mode 1: sketch_rectangle
     // mode 2: circle
@@ -27,7 +26,6 @@ public class draw_sketch : MonoBehaviour {
     // Use this for initialization
     void Start () {
         
-        mode = 0;
         feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
     }
 	
@@ -47,7 +45,7 @@ public class draw_sketch : MonoBehaviour {
 
         //LineRenderer rend = GetComponent<LineRenderer>();
 
-        switch (mode)
+        switch (feature_info.s_mode)
         {
             case 0: // not selected
                 //rend.enabled = false;
@@ -130,29 +128,86 @@ public class draw_sketch : MonoBehaviour {
                 positions = new Vector3[segments];
                 rend2.loop = true;
 
-                float xradius = 3.0f;
-                float yradius = 3.0f;
+                Vector3 center = new Vector3(0f, 0f, 0f);
+                Vector2 radius = new Vector2(0f, 0f);
 
-                float x;
-                float y;
-                float z = 0f;
-
-                float angle = 0.0f;
-
-                for (int i = 0; i < (segments); i++)
+                if (Input.GetMouseButtonDown(0))
                 {
-                    x = Mathf.Sin(Mathf.Deg2Rad * angle) * xradius;
-                    y = Mathf.Cos(Mathf.Deg2Rad * angle) * yradius;
 
-                    positions[i] = new Vector3(x, y, z);
+                    click_count = 1;
 
-                    angle += (360f / segments);
+                    start = v3;
+                    end = v3;
+
+                }
+                if (Input.GetMouseButton(0))
+                {
+                    if (click_count != 1)
+                        break;
+                    end = v3;
+
+                    center.x = (start.x + end.x) / 2;
+                    center.y = (start.y + end.y) / 2;
+
+                    radius.x = Mathf.Abs(end.x - start.x) / 2;
+                    radius.y = Mathf.Abs(end.y - start.y) / 2;
+
+                    float x;
+                    float y;
+                    float z = 0f;
+
+                    float angle = 0.0f;
+
+                    for (int i = 0; i < (segments); i++)
+                    {
+                        x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius.x + center.x;
+                        y = Mathf.Cos(Mathf.Deg2Rad * angle) * radius.y + center.y;
+
+                        positions[i] = new Vector3(x, y, z);
+
+                        angle += (360f / segments);
+                    }
+
+                    rend2.positionCount = positions.Length;
+                    rend2.SetPositions(positions);
+
+                }
+                if (Input.GetMouseButtonUp(0))
+                {
+                    if (click_count != 1)
+                        break;
+                    end = v3;
+
+                    center.x = (start.x + end.x) / 2;
+                    center.y = (start.y + end.y) / 2;
+
+                    radius.x = Mathf.Abs(end.x - start.x) / 2;
+                    radius.y = Mathf.Abs(end.y - start.y) / 2;
+
+                    float x;
+                    float y;
+                    float z = 0f;
+
+                    float angle = 0.0f;
+
+                    for (int i = 0; i < (segments); i++)
+                    {
+                        x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius.x + center.x;
+                        y = Mathf.Cos(Mathf.Deg2Rad * angle) * radius.y + center.y;
+
+                        positions[i] = new Vector3(x, y, z);
+
+                        angle += (360f / segments);
+                    }
+
+                    rend2.positionCount = positions.Length;
+                    rend2.SetPositions(positions);
+
+                    feature_info.cir.center = center;
+                    feature_info.cir.radius = radius;
                 }
 
-                rend2.positionCount = positions.Length;
-                rend2.SetPositions(positions);
 
-                
 
 
                 break;
@@ -163,12 +218,5 @@ public class draw_sketch : MonoBehaviour {
         }
 
     }
-
-    public void ModeChange_rec(int i)
-    {
-        mode = i;
-    }
-
-
 
 }

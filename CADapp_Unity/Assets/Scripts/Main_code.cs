@@ -12,7 +12,7 @@ public struct plane_def
 public struct circle_def
 {
     public Vector3 center;
-    public float radius;
+    public Vector2 radius;
 }
 
 public class Main_code : MonoBehaviour {
