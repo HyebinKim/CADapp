@@ -50,13 +50,10 @@ public class draw_sketch : MonoBehaviour {
             switch (feature_info.s_mode)
             {
                 case 0: // not selected
-                    feature_info.s_feature = 0;
-                    //rend.enabled = false;
+
                     break;
 
                 case 1: //rectangle
-                        //rend.enabled = true;
-                    feature_info.s_feature = 1;
 
                     LineRenderer rend = GetComponent<LineRenderer>();
                     rend.material = new Material(Shader.Find("Particles/Additive"));
@@ -123,7 +120,6 @@ public class draw_sketch : MonoBehaviour {
                 
                 //circle
                 case 2:
-                    feature_info.s_feature = 2;
 
                     LineRenderer rend2 = GetComponent<LineRenderer>();
                     rend2.material = new Material(Shader.Find("Particles/Additive"));
@@ -218,15 +214,14 @@ public class draw_sketch : MonoBehaviour {
                     break;
                 //polygonal
                 case 3:
-                    feature_info.s_feature = 3;
                     break;
                 default:
                     break;
             }
         }
 
-        
-
     }
+
+    
 
 }

@@ -30,8 +30,8 @@ public class main_display : MonoBehaviour {
                     rend.enabled = true;
                     rend.material = new Material(Shader.Find("Particles/Additive"));
 
-                    rend.startColor = Color.red;
-                    rend.endColor = Color.red;
+                    rend.startColor = Color.white;
+                    rend.endColor = Color.white;
                     rend.startWidth = 0.1f;
                     rend.endWidth = 0.1f;
 
@@ -45,8 +45,8 @@ public class main_display : MonoBehaviour {
                     rend.enabled = true;
                     rend.material = new Material(Shader.Find("Particles/Additive"));
 
-                    rend.startColor = Color.red;
-                    rend.endColor = Color.red;
+                    rend.startColor = Color.white;
+                    rend.endColor = Color.white;
                     rend.startWidth = 0.1f;
                     rend.endWidth = 0.1f;
 

@@ -59,12 +59,19 @@ public class Main_code : MonoBehaviour {
     public plane_def yz;
     public plane_def zx;
 
+    public Text xy_plane;
+    public Text yz_plane;
+    public Text zx_plane;
+
     //circle
     public circle_def cir;
 
     //vertex
     public Vector3[] rec = new Vector3[4]; //vector3[2] or vector3[4] ??????
-    
+
+    //feature 
+    public Text sketch_m;
+    public Text solid_m;
 
 
 	// Use this for initialization
@@ -84,6 +91,8 @@ public class Main_code : MonoBehaviour {
         zx.point = new Vector3(0, 0, 0); zx.normal = new Vector3(0, 1, 0);
 
         s_feature = 0;
+        sketch_m.text = "";
+        solid_m.text = "";
 
     }
 	
@@ -144,6 +153,55 @@ public class Main_code : MonoBehaviour {
     public void Change_sMode(int i)
     {
         s_mode = i;
+    }
+
+    public void Create_sketch()
+    {
+        if (m_mode != 2) return;
+        Debug.Log("it'work");
+        //sketch 객체 판별
+        switch (s_mode)
+        {
+            case 0:
+                s_feature = 0;
+                break;
+            case 1:
+                s_feature = 1;
+                break;
+            case 2:
+                s_feature = 2;
+                break;
+            case 3:
+                s_feature = 3;
+                break;
+            default:
+                break;
+
+        }
+
+        //sketch 객체 생성
+        if (s_feature != 0)
+        {
+            Text NewSketch = Instantiate(sketch_m) as Text;
+            if (s_feature == 1)
+            {
+                NewSketch.text = "- Rectangle 1";
+                //sketch_m.text = "Rectangle 1";
+            }
+            else if (s_feature == 2)
+            {
+                NewSketch.text = "- Circle 1";
+            }
+            NewSketch.transform.SetParent(xy_plane.transform);
+            NewSketch.transform.localPosition = new Vector3(120, -5, 0);
+            NewSketch.color = Color.white;
+
+            //sketch_m.transform.position = new Vector3(400, 50, 0);
+            //sketch_m.color = Color.white;
+        }
+
+        //feature_info.s_feature = 0;
+
     }
 
 }
