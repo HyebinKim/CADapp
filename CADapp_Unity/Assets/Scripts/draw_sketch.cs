@@ -45,181 +45,187 @@ public class draw_sketch : MonoBehaviour {
 
         //LineRenderer rend = GetComponent<LineRenderer>();
 
-        switch (feature_info.s_mode)
+        if (feature_info.m_mode == 2)
         {
-            case 0: // not selected
-                feature_info.s_feature = 0;
-                //rend.enabled = false;
-                break;
-            case 1: //rectangle
-                //rend.enabled = true;
-                feature_info.s_feature = 1;
+            switch (feature_info.s_mode)
+            {
+                case 0: // not selected
+                    feature_info.s_feature = 0;
+                    //rend.enabled = false;
+                    break;
 
-                LineRenderer rend = GetComponent<LineRenderer>();
-                rend.material = new Material(Shader.Find("Particles/Additive"));
+                case 1: //rectangle
+                        //rend.enabled = true;
+                    feature_info.s_feature = 1;
 
-                rend.startColor = c1;
-                rend.endColor = c1;
-                rend.startWidth = 0.1f;
-                rend.endWidth = 0.1f;
+                    LineRenderer rend = GetComponent<LineRenderer>();
+                    rend.material = new Material(Shader.Find("Particles/Additive"));
 
-                positions = new Vector3[4];
-                rend.loop = true;
+                    rend.startColor = c1;
+                    rend.endColor = c1;
+                    rend.startWidth = 0.1f;
+                    rend.endWidth = 0.1f;
 
-                if (Input.GetMouseButtonDown(0))
-                {
-                    click_count = 1;
+                    positions = new Vector3[4];
+                    rend.loop = true;
 
-                    start = v3;
-                    end = v3;
-
-                    positions[0] = start;
-                    positions[1] = new Vector3(start.x, end.y, 0);
-                    positions[2] = end;
-                    positions[3] = new Vector3(end.x, start.y, 0);
-
-                    rend.positionCount = positions.Length;
-                    rend.SetPositions(positions);
-
-                }
-                if (Input.GetMouseButton(0))
-                {
-                    if (click_count != 1)
-                        break;
-                    end = v3;
-
-                    positions[0] = start;
-                    positions[1] = new Vector3(start.x, end.y, 0);
-                    positions[2] = end;
-                    positions[3] = new Vector3(end.x, start.y, 0);
-
-                    rend.positionCount = positions.Length;
-                    rend.SetPositions(positions);
-                }
-                if (Input.GetMouseButtonUp(0))
-                {
-                    if (click_count != 1)
-                        break;
-                    end = v3;
-
-                    positions[0] = start;
-                    positions[1] = new Vector3(start.x, end.y, 0);
-                    positions[2] = end;
-                    positions[3] = new Vector3(end.x, start.y, 0);
-
-                    rend.positionCount = positions.Length;
-                    rend.SetPositions(positions);
-
-                    for (int i=0; i < 4; i++)
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        feature_info.rec[i] = positions[i];
+                        click_count = 1;
+
+                        start = v3;
+                        end = v3;
+
+                        positions[0] = start;
+                        positions[1] = new Vector3(start.x, end.y, 0);
+                        positions[2] = end;
+                        positions[3] = new Vector3(end.x, start.y, 0);
+
+                        rend.positionCount = positions.Length;
+                        rend.SetPositions(positions);
+
                     }
-                }
-
-                break;
-            case 2://circle
-                feature_info.s_feature = 2;
-
-                LineRenderer rend2 = GetComponent<LineRenderer>();
-                rend2.material = new Material(Shader.Find("Particles/Additive"));
-
-                rend2.startColor = c1;
-                rend2.endColor = c1;
-                rend2.startWidth = 0.1f;
-                rend2.endWidth = 0.1f;
-
-                positions = new Vector3[segments];
-                rend2.loop = true;
-
-                Vector3 center = new Vector3(0f, 0f, 0f);
-                Vector2 radius = new Vector2(0f, 0f);
-
-                if (Input.GetMouseButtonDown(0))
-                {
-
-                    click_count = 1;
-
-                    start = v3;
-                    end = v3;
-
-                }
-                if (Input.GetMouseButton(0))
-                {
-                    if (click_count != 1)
-                        break;
-                    end = v3;
-
-                    center.x = (start.x + end.x) / 2;
-                    center.y = (start.y + end.y) / 2;
-
-                    radius.x = Mathf.Abs(end.x - start.x) / 2;
-                    radius.y = Mathf.Abs(end.y - start.y) / 2;
-
-                    float x;
-                    float y;
-                    float z = 0f;
-
-                    float angle = 0.0f;
-
-                    for (int i = 0; i < (segments); i++)
+                    if (Input.GetMouseButton(0))
                     {
-                        x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius.x + center.x;
-                        y = Mathf.Cos(Mathf.Deg2Rad * angle) * radius.y + center.y;
+                        if (click_count != 1)
+                            break;
+                        end = v3;
 
-                        positions[i] = new Vector3(x, y, z);
+                        positions[0] = start;
+                        positions[1] = new Vector3(start.x, end.y, 0);
+                        positions[2] = end;
+                        positions[3] = new Vector3(end.x, start.y, 0);
 
-                        angle += (360f / segments);
+                        rend.positionCount = positions.Length;
+                        rend.SetPositions(positions);
+                    }
+                    if (Input.GetMouseButtonUp(0))
+                    {
+                        if (click_count != 1)
+                            break;
+                        end = v3;
+
+                        positions[0] = start;
+                        positions[1] = new Vector3(start.x, end.y, 0);
+                        positions[2] = end;
+                        positions[3] = new Vector3(end.x, start.y, 0);
+
+                        rend.positionCount = positions.Length;
+                        rend.SetPositions(positions);
+
+                        for (int i = 0; i < 4; i++)
+                        {
+                            feature_info.rec[i] = positions[i];
+                        }
                     }
 
-                    rend2.positionCount = positions.Length;
-                    rend2.SetPositions(positions);
+                    break;
+                
+                //circle
+                case 2:
+                    feature_info.s_feature = 2;
 
-                }
-                if (Input.GetMouseButtonUp(0))
-                {
-                    if (click_count != 1)
-                        break;
-                    end = v3;
+                    LineRenderer rend2 = GetComponent<LineRenderer>();
+                    rend2.material = new Material(Shader.Find("Particles/Additive"));
 
-                    center.x = (start.x + end.x) / 2;
-                    center.y = (start.y + end.y) / 2;
+                    rend2.startColor = c1;
+                    rend2.endColor = c1;
+                    rend2.startWidth = 0.1f;
+                    rend2.endWidth = 0.1f;
 
-                    radius.x = Mathf.Abs(end.x - start.x) / 2;
-                    radius.y = Mathf.Abs(end.y - start.y) / 2;
+                    positions = new Vector3[segments];
+                    rend2.loop = true;
 
-                    float x;
-                    float y;
-                    float z = 0f;
+                    Vector3 center = new Vector3(0f, 0f, 0f);
+                    Vector2 radius = new Vector2(0f, 0f);
 
-                    float angle = 0.0f;
-
-                    for (int i = 0; i < (segments); i++)
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius.x + center.x;
-                        y = Mathf.Cos(Mathf.Deg2Rad * angle) * radius.y + center.y;
 
-                        positions[i] = new Vector3(x, y, z);
+                        click_count = 1;
 
-                        angle += (360f / segments);
+                        start = v3;
+                        end = v3;
+
+                    }
+                    if (Input.GetMouseButton(0))
+                    {
+                        if (click_count != 1)
+                            break;
+                        end = v3;
+
+                        center.x = (start.x + end.x) / 2;
+                        center.y = (start.y + end.y) / 2;
+
+                        radius.x = Mathf.Abs(end.x - start.x) / 2;
+                        radius.y = Mathf.Abs(end.y - start.y) / 2;
+
+                        float x;
+                        float y;
+                        float z = 0f;
+
+                        float angle = 0.0f;
+
+                        for (int i = 0; i < (segments); i++)
+                        {
+                            x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius.x + center.x;
+                            y = Mathf.Cos(Mathf.Deg2Rad * angle) * radius.y + center.y;
+
+                            positions[i] = new Vector3(x, y, z);
+
+                            angle += (360f / segments);
+                        }
+
+                        rend2.positionCount = positions.Length;
+                        rend2.SetPositions(positions);
+
+                    }
+                    if (Input.GetMouseButtonUp(0))
+                    {
+                        if (click_count != 1)
+                            break;
+                        end = v3;
+
+                        center.x = (start.x + end.x) / 2;
+                        center.y = (start.y + end.y) / 2;
+
+                        radius.x = Mathf.Abs(end.x - start.x) / 2;
+                        radius.y = Mathf.Abs(end.y - start.y) / 2;
+
+                        float x;
+                        float y;
+                        float z = 0f;
+
+                        float angle = 0.0f;
+
+                        for (int i = 0; i < (segments); i++)
+                        {
+                            x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius.x + center.x;
+                            y = Mathf.Cos(Mathf.Deg2Rad * angle) * radius.y + center.y;
+
+                            positions[i] = new Vector3(x, y, z);
+
+                            angle += (360f / segments);
+                        }
+
+                        rend2.positionCount = positions.Length;
+                        rend2.SetPositions(positions);
+
+                        feature_info.cir.center = center;
+                        feature_info.cir.radius = radius;
                     }
 
-                    rend2.positionCount = positions.Length;
-                    rend2.SetPositions(positions);
-
-                    feature_info.cir.center = center;
-                    feature_info.cir.radius = radius;
-                }
-
-
-
-
-                break;
-            case 3:
-                feature_info.s_feature = 3;
-                break;
-            default:
-                break;
+                    break;
+                //polygonal
+                case 3:
+                    feature_info.s_feature = 3;
+                    break;
+                default:
+                    break;
+            }
         }
+
+        
 
     }
 
