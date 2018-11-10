@@ -63,6 +63,14 @@ public class Main_code : MonoBehaviour {
     public Text yz_plane;
     public Text zx_plane;
 
+    public Button xy_;
+    public Button yz_;
+    public Button zx_;
+
+    //current plane
+    public plane_def nowP;
+
+
     //circle
     public circle_def cir;
 
@@ -93,6 +101,12 @@ public class Main_code : MonoBehaviour {
         s_feature = 0;
         sketch_m.text = "";
         solid_m.text = "";
+
+        nowP = xy;
+
+        xy_.onClick.AddListener(delegate { Change_plane(xy.point, xy.normal); });
+        yz_.onClick.AddListener(delegate { Change_plane(yz.point, yz.normal); });
+        zx_.onClick.AddListener(delegate { Change_plane(zx.point, zx.normal); });
 
     }
 	
@@ -155,6 +169,13 @@ public class Main_code : MonoBehaviour {
         s_mode = i;
     }
 
+    public void Change_plane(Vector3 point, Vector3 normal)
+    {
+        nowP.point = point;
+        nowP.normal = normal;
+    }
+
+    //feature tree
     public void Create_sketch()
     {
         if (m_mode != 2) return;

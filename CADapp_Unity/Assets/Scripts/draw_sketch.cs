@@ -212,8 +212,12 @@ public class draw_sketch : MonoBehaviour {
                     }
 
                     break;
+
                 //polygonal
                 case 3:
+                    //var pos3;
+
+
                     break;
                 default:
                     break;
