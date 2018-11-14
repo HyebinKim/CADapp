@@ -50,20 +50,16 @@ public class main_display : MonoBehaviour {
                     rend.endWidth = 0.1f;
 
                     int segments = 60;
-                    Vector3[] position= new Vector3[segments];                   
+                    Vector3[] position= new Vector3[segments];
 
-                    float x;
-                    float y;
-                    float z = 0f;
+                    Vector3 temp;
 
                     float angle = 0.0f;
 
                     for (int i = 0; i < (segments); i++)
                     {
-                        x = Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x + feature_info.cir.center.x;
-                        y = Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y + feature_info.cir.center.y;
-
-                        position[i] = new Vector3(x, y, z);
+                        temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
+                        position[i] = temp;
 
                         angle += (360f / segments);
                     }

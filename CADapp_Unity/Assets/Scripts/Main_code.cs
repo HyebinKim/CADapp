@@ -16,6 +16,8 @@ public struct circle_def
 {
     public Vector3 center;
     public Vector2 radius;
+
+    public plane_def cir_plane;
 }
 
 public class Main_code : MonoBehaviour {
@@ -77,8 +79,9 @@ public class Main_code : MonoBehaviour {
     //circle
     public circle_def cir;
 
-    //vertex
-    public Vector3[] rec = new Vector3[4]; //vector3[2] or vector3[4] ??????
+    //rectangle
+    public Vector3[] rec = new Vector3[4];
+    public plane_def rec_plane;
 
     //feature 
     public Text sketch_m;

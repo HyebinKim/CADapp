@@ -57,6 +57,7 @@ public class create_solid : MonoBehaviour
 
                     break;
                 case 2:
+                    Filter.sharedMesh = Build2();
                     break;
                 default:
                     break;
@@ -87,6 +88,27 @@ public class create_solid : MonoBehaviour
         return mesh;
     }
 
+    Mesh Build2()
+    {
+        var mesh = new Mesh();
+
+        var vertices = new List<Vector3>();
+        var normals = new List<Vector3>();
+        var uvs = new List<Vector2>();
+        var triangles = new List<int>();
+
+        //create top, bottom face: GenerateCap
+        GenerateFaces2(vertices, uvs, normals, triangles);
+
+        mesh.vertices = vertices.ToArray();
+        mesh.uv = uvs.ToArray();
+        mesh.normals = normals.ToArray();
+        mesh.triangles = triangles.ToArray();
+        mesh.RecalculateBounds();
+
+        return mesh;
+    }
+
     void GenerateCap(List<Vector3> vertices, List<Vector2> uvs, List<Vector3> normals, List<int> triangles)
     {
         if (feature_info.s_feature == 1)//rectangle
@@ -99,7 +121,7 @@ public class create_solid : MonoBehaviour
             for(int i = 0; i < 4; i++)
             {
                 vertices.Add(feature_info.rec[i]);
-                normals.Add( -direct * feature_info.nowP.normal);
+                normals.Add( -direct * feature_info.rec_plane.normal);
 
             }
             uvs.Add(new Vector2(0.0f, 0.0f));
@@ -112,8 +134,8 @@ public class create_solid : MonoBehaviour
             //top
             for (int i = 0; i < 4; i++)
             {
-                vertices.Add(feature_info.rec[i]+length*direct * feature_info.nowP.normal);
-                normals.Add(direct * feature_info.nowP.normal);
+                vertices.Add(feature_info.rec[i]+length*direct * feature_info.rec_plane.normal);
+                normals.Add(direct * feature_info.rec_plane.normal);
 
             }
 
@@ -124,13 +146,11 @@ public class create_solid : MonoBehaviour
 
             vertices.Add(center);
             uvs.Add(new Vector2(0.5f, 0.5f));
-            normals.Add(-direct * feature_info.nowP.normal);
+            normals.Add(-direct * feature_info.rec_plane.normal);
 
-            vertices.Add(center + length * direct * feature_info.nowP.normal);
+            vertices.Add(center + length * direct * feature_info.rec_plane.normal);
             uvs.Add(new Vector2(0.5f, 0.5f));
-            normals.Add(direct * feature_info.nowP.normal);
-
-
+            normals.Add(direct * feature_info.rec_plane.normal);
 
             //bottom
             int j = 0;
@@ -147,9 +167,6 @@ public class create_solid : MonoBehaviour
                 {
                     triangles.Add(0 + 4* j);
                 }
-
-               
-
             }
 
             //top
@@ -243,5 +260,98 @@ public class create_solid : MonoBehaviour
         }
     }
 
+    void GenerateFaces(List<Vector3> vertices, List<Vector2> uvs, List<Vector3> normals, List<int> triangles)
+    {
+        int segments = 60;
+        Vector3 temp;
 
- }
+        float angle = 0.0f;
+
+        //bottom
+        for (int i = 0; i < (segments); i++)
+        {
+            temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
+            vertices.Add(temp);
+            uvs.Add(new Vector2((float)i/(segments-1), 0.0f));
+            normals.Add(Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) *feature_info.cir.cir_plane.v);
+
+            angle += (360f / segments);
+        }
+        //top
+        angle = 0.0f;
+        for (int i = 0; i < (segments); i++)
+        {
+            temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
+            temp = temp + +length * direct * feature_info.cir.cir_plane.normal;
+            vertices.Add(temp);
+            uvs.Add(new Vector2((float)i / (segments - 1), 1.0f));
+            normals.Add(Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.v);
+
+            angle += (360f / segments);
+        }
+
+            for (int i = 0; i < (segments-1); i++)
+            {
+                triangles.Add(i);
+                triangles.Add(i + segments);
+                triangles.Add(i+1);
+                
+
+                triangles.Add(i +1 );
+                triangles.Add(i + 1 + segments);
+                triangles.Add(i + segments);
+            }
+
+    }
+
+    void GenerateFaces2(List<Vector3> vertices, List<Vector2> uvs, List<Vector3> normals, List<int> triangles)
+    {
+        int segments = 60;
+        Vector3 temp;
+
+        float angle = 0.0f;
+
+        //bottom
+        for (int i = 0; i < (segments); i++)
+        {
+            temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
+            vertices.Add(temp);
+            uvs.Add(new Vector2((float)i / (segments - 1), 0.0f));
+            normals.Add(feature_info.cir.cir_plane.normal);
+
+            angle += (360f / segments);
+        }
+        //top
+        angle = 0.0f;
+        for (int i = 0; i < (segments); i++)
+        {
+            temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
+            temp = temp + +length * direct * feature_info.cir.cir_plane.normal;
+            vertices.Add(temp);
+            uvs.Add(new Vector2((float)i / (segments - 1), 1.0f));
+            normals.Add(feature_info.cir.cir_plane.normal);
+
+            angle += (360f / segments);
+        }
+
+        vertices.Add(feature_info.cir.center);
+        uvs.Add(new Vector2(0.5f , 0.5f));
+        normals.Add(feature_info.cir.cir_plane.normal);
+
+        vertices.Add(feature_info.cir.center + length * direct * feature_info.cir.cir_plane.normal);
+        uvs.Add(new Vector2(0.5f, 0.5f));
+        normals.Add(feature_info.cir.cir_plane.normal);
+
+
+
+        for (int i = 0; i < (segments - 1); i++)
+        {
+            triangles.Add(2*segments);
+            triangles.Add(i + 1);
+            triangles.Add(i);
+
+        }
+
+    }
+
+}

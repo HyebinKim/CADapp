@@ -64,13 +64,13 @@ public class draw_sketch : MonoBehaviour {
                     positions = new Vector3[4];
                     rend.loop = true;
 
+                    feature_info.rec_plane = feature_info.nowP;
 
                     if (Input.GetMouseButtonDown(0))
                     {
                         click_count = 1;
                         start = v3;
 
-                        temp = v3;
 
                     }
                     if (Input.GetMouseButton(0))
@@ -80,9 +80,9 @@ public class draw_sketch : MonoBehaviour {
                         end = v3;
 
                         positions[0] = start;
-                        positions[1] = start + Vector3.Dot(feature_info.nowP.v, (v3 - temp)) * feature_info.nowP.v;
+                        positions[1] = start + Vector3.Dot(feature_info.nowP.v, (v3 - start)) * feature_info.nowP.v;
                         positions[2] = end;
-                        positions[3] = start + Vector3.Dot(feature_info.nowP.u, (v3 - temp)) * feature_info.nowP.u;
+                        positions[3] = start + Vector3.Dot(feature_info.nowP.u, (v3 - start)) * feature_info.nowP.u;
 
                         rend.positionCount = positions.Length;
                         rend.SetPositions(positions);
@@ -94,9 +94,9 @@ public class draw_sketch : MonoBehaviour {
                         end = v3;
 
                         positions[0] = start;
-                        positions[1] = start + Vector3.Dot(feature_info.nowP.v, (v3 - temp)) * feature_info.nowP.v;
+                        positions[1] = start + Vector3.Dot(feature_info.nowP.v, (v3 - start)) * feature_info.nowP.v;
                         positions[2] = end;
-                        positions[3] = start + Vector3.Dot(feature_info.nowP.u, (v3 - temp)) * feature_info.nowP.u;
+                        positions[3] = start + Vector3.Dot(feature_info.nowP.u, (v3 - start)) * feature_info.nowP.u;
 
                         rend.positionCount = positions.Length;
                         rend.SetPositions(positions);
@@ -126,13 +126,14 @@ public class draw_sketch : MonoBehaviour {
                     Vector3 center = new Vector3(0f, 0f, 0f);
                     Vector2 radius = new Vector2(0f, 0f);
 
+                    feature_info.cir.cir_plane = feature_info.nowP;
+
                     if (Input.GetMouseButtonDown(0))
                     {
 
                         click_count = 1;
 
                         start = v3;
-                        end = v3;
 
                     }
                     if (Input.GetMouseButton(0))
@@ -141,24 +142,19 @@ public class draw_sketch : MonoBehaviour {
                             break;
                         end = v3;
 
-                        center.x = (start.x + end.x) / 2;
-                        center.y = (start.y + end.y) / 2;
+                        center = (start + end) / 2;
 
-                        radius.x = Mathf.Abs(end.x - start.x) / 2;
-                        radius.y = Mathf.Abs(end.y - start.y) / 2;
+                        radius.x = Vector3.Dot(feature_info.nowP.u, (v3 - start)) / 2;
+                        radius.y = Vector3.Dot(feature_info.nowP.v, (v3 - start)) / 2;
 
-                        float x;
-                        float y;
-                        float z = 0f;
+                        Vector3 temp;
 
                         float angle = 0.0f;
 
                         for (int i = 0; i < (segments); i++)
                         {
-                            x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius.x + center.x;
-                            y = Mathf.Cos(Mathf.Deg2Rad * angle) * radius.y + center.y;
-
-                            positions[i] = new Vector3(x, y, z);
+                            temp = center + Mathf.Cos(Mathf.Deg2Rad * angle) * radius.x * feature_info.nowP.u + Mathf.Sin(Mathf.Deg2Rad * angle) * radius.y * feature_info.nowP.v;
+                            positions[i] = temp;
 
                             angle += (360f / segments);
                         }
@@ -173,24 +169,19 @@ public class draw_sketch : MonoBehaviour {
                             break;
                         end = v3;
 
-                        center.x = (start.x + end.x) / 2;
-                        center.y = (start.y + end.y) / 2;
+                        center = (start + end) / 2;
 
-                        radius.x = Mathf.Abs(end.x - start.x) / 2;
-                        radius.y = Mathf.Abs(end.y - start.y) / 2;
+                        radius.x = Vector3.Dot(feature_info.nowP.u, (v3 - start)) / 2;
+                        radius.y = Vector3.Dot(feature_info.nowP.v, (v3 - start)) / 2;
 
-                        float x;
-                        float y;
-                        float z = 0f;
+                        Vector3 temp;
 
                         float angle = 0.0f;
 
                         for (int i = 0; i < (segments); i++)
                         {
-                            x = Mathf.Sin(Mathf.Deg2Rad * angle) * radius.x + center.x;
-                            y = Mathf.Cos(Mathf.Deg2Rad * angle) * radius.y + center.y;
-
-                            positions[i] = new Vector3(x, y, z);
+                            temp = center + Mathf.Cos(Mathf.Deg2Rad * angle) * radius.x * feature_info.nowP.u + Mathf.Sin(Mathf.Deg2Rad * angle) * radius.y * feature_info.nowP.v;
+                            positions[i] = temp;
 
                             angle += (360f / segments);
                         }
