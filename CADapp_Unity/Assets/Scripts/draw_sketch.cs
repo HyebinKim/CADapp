@@ -17,7 +17,7 @@ public class draw_sketch : MonoBehaviour {
     Vector3 end = new Vector3(0, 0, 0);
     Vector3[] positions;
 
-    public int segments = 60; //circle segments
+    int segments = 60; //circle segments
 
     public Text ToWorld;
 

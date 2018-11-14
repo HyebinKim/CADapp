@@ -52,12 +52,11 @@ public class create_solid : MonoBehaviour
             {
                 case 0:
                     break;
-                case 1:
-                   Filter.sharedMesh = Build();
-
+                case 1: //extrusion
+                        Filter.sharedMesh = Build();
                     break;
-                case 2:
-                    Filter.sharedMesh = Build2();
+                case 2: //cut extrusion
+                    
                     break;
                 default:
                     break;
@@ -78,27 +77,6 @@ public class create_solid : MonoBehaviour
         //create top, bottom face: GenerateCap
         GenerateCap(vertices, uvs, normals, triangles);
         GenerateSide(vertices, uvs, normals, triangles);
-
-        mesh.vertices = vertices.ToArray();
-        mesh.uv = uvs.ToArray();
-        mesh.normals = normals.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.RecalculateBounds();
-
-        return mesh;
-    }
-
-    Mesh Build2()
-    {
-        var mesh = new Mesh();
-
-        var vertices = new List<Vector3>();
-        var normals = new List<Vector3>();
-        var uvs = new List<Vector2>();
-        var triangles = new List<int>();
-
-        //create top, bottom face: GenerateCap
-        GenerateFaces2(vertices, uvs, normals, triangles);
 
         mesh.vertices = vertices.ToArray();
         mesh.uv = uvs.ToArray();
@@ -152,44 +130,203 @@ public class create_solid : MonoBehaviour
             uvs.Add(new Vector2(0.5f, 0.5f));
             normals.Add(direct * feature_info.rec_plane.normal);
 
-            //bottom
-            int j = 0;
-            for (int i = 0; i < 4; i++)
+            //direction: 1-positive, -1 -negative
+            if (direct == 1)
             {
-                triangles.Add(8 + 1* j);
-                triangles.Add(i + 4 * j);
+                //bottom
+                int j = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    triangles.Add(8 + 1 * j);
+                    triangles.Add(i + 4 * j);
 
-                if (i != 3)
-                {
-                    triangles.Add(i + 1 + 4* j);
+                    if (i != 3)
+                    {
+                        triangles.Add(i + 1 + 4 * j);
+                    }
+                    else
+                    {
+                        triangles.Add(0 + 4 * j);
+                    }
                 }
-                else
+
+                //top
+                j = 1;
+                for (int i = 0; i < 4; i++)
                 {
-                    triangles.Add(0 + 4* j);
+                    triangles.Add(8 + 1 * j);
+
+                    if (i != 3)
+                    {
+                        triangles.Add(i + 1 + 4 * j);
+                    }
+                    else
+                    {
+                        triangles.Add(0 + 4 * j);
+                    }
+
+                    triangles.Add(i + 4 * j);
+
+                }
+            }
+            else
+            {
+                //bottom
+                int j = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    triangles.Add(i + 4 * j);
+                    triangles.Add(8 + 1 * j);
+                    
+
+                    if (i != 3)
+                    {
+                        triangles.Add(i + 1 + 4 * j);
+                    }
+                    else
+                    {
+                        triangles.Add(0 + 4 * j);
+                    }
+                }
+
+                //top
+                j = 1;
+                for (int i = 0; i < 4; i++)
+                {
+                    triangles.Add(8 + 1 * j);
+                    triangles.Add(i + 4 * j);
+
+                    if (i != 3)
+                    {
+                        triangles.Add(i + 1 + 4 * j);
+                    }
+                    else
+                    {
+                        triangles.Add(0 + 4 * j);
+                    }
+
+                    
+
                 }
             }
 
-            //top
-            j = 1;
-            for (int i = 0; i < 4; i++)
-            {
-                triangles.Add(8 + 1 * j);
-
-                if (i != 3)
-                {
-                    triangles.Add(i + 1 + 4 * j);
-                }
-                else
-                {
-                    triangles.Add(0 + 4 * j);
-                }
-
-                triangles.Add(i + 4 * j);
-
-            }
 
         }
+        else if (feature_info.s_feature == 2)
+        {
+            int segments = 60;
+            Vector3 temp;
 
+            float angle = 0.0f;
+
+            //bottom
+            for (int i = 0; i < (segments); i++)
+            {
+                temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
+                vertices.Add(temp);
+                uvs.Add(new Vector2((float)i / (segments - 1), 0.0f));
+
+                //normals.Add(new Vector3(0,0,1));
+                normals.Add(-direct * feature_info.cir.cir_plane.normal);
+
+                angle += (360f / segments);
+            }
+            //top
+            angle = 0.0f;
+            for (int i = 0; i < (segments); i++)
+            {
+                temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
+                temp = temp + +length * direct * feature_info.cir.cir_plane.normal;
+                vertices.Add(temp);
+                uvs.Add(new Vector2((float)i / (segments - 1), 1.0f));
+                normals.Add(direct * feature_info.cir.cir_plane.normal);
+
+                angle += (360f / segments);
+            }
+
+            vertices.Add(feature_info.cir.center);
+            uvs.Add(new Vector2(0.5f, 0.5f));
+            //normals.Add(new Vector3(0, 0, 1));
+            normals.Add(-direct * feature_info.cir.cir_plane.normal);
+
+            vertices.Add(feature_info.cir.center + length * direct * feature_info.cir.cir_plane.normal);
+            uvs.Add(new Vector2(0.5f, 0.5f));
+            normals.Add(direct * feature_info.cir.cir_plane.normal);
+
+            //direction: 1-positive, -1 -negative
+            if (direct == 1)
+            {
+                for (int i = 0; i < segments; i++)
+                {
+                    triangles.Add(2 * segments);
+                    if (i + 1 != segments)
+                    {
+                        triangles.Add(i + 1);
+                    }
+                    else
+                    {
+                        triangles.Add(0);
+                    }
+                    triangles.Add(i);
+                }
+
+                for (int i = 0; i < segments; i++)
+                {
+                    triangles.Add(2 * segments + 1);
+                    triangles.Add(segments + i);
+
+                    if (i + 1 != segments)
+                    {
+                        triangles.Add(segments + i + 1);
+                    }
+                    else
+                    {
+                        triangles.Add(segments);
+                    }
+
+
+
+                }
+            }
+            else
+            {
+                for (int i = 0; i < segments; i++)
+                {
+                    triangles.Add(2 * segments);
+                    triangles.Add(i);
+                    if (i + 1 != segments)
+                    {
+                        triangles.Add(i + 1);
+                    }
+                    else
+                    {
+                        triangles.Add(0);
+                    }
+                    
+                }
+
+                for (int i = 0; i < segments; i++)
+                {
+                    triangles.Add(segments + i);
+                    triangles.Add(2 * segments + 1);
+                    
+
+                    if (i + 1 != segments)
+                    {
+                        triangles.Add(segments + i + 1);
+                    }
+                    else
+                    {
+                        triangles.Add(segments);
+                    }
+
+
+
+                }
+            }
+
+
+        }
     }
 
     void GenerateSide(List<Vector3> vertices, List<Vector2> uvs, List<Vector3> normals, List<int> triangles)
@@ -216,14 +353,31 @@ public class create_solid : MonoBehaviour
                     normals.Add(tot_normal);
                     normals.Add(tot_normal);
 
-                    triangles.Add(10 + i * 4);
-                    triangles.Add(10 + i * 4 + 2);
-                    triangles.Add(10 + i * 4 + 1);
+                    //direction: 1-positive, -1 -negative
+                    if (direct == 1)
+                    {
+                        triangles.Add(10 + i * 4);
+                        triangles.Add(10 + i * 4 + 2);
+                        triangles.Add(10 + i * 4 + 1);
 
 
-                    triangles.Add(10 + i * 4 + 2);
-                    triangles.Add(10 + i * 4 + 3);
-                    triangles.Add(10 + i * 4 + 1);
+                        triangles.Add(10 + i * 4 + 2);
+                        triangles.Add(10 + i * 4 + 3);
+                        triangles.Add(10 + i * 4 + 1);
+                    }
+                    else
+                    {
+                        triangles.Add(10 + i * 4);
+                        triangles.Add(10 + i * 4 + 1);
+                        triangles.Add(10 + i * 4 + 2);
+
+
+                        triangles.Add(10 + i * 4 + 2);
+                        triangles.Add(10 + i * 4 + 1);
+                        triangles.Add(10 + i * 4 + 3);
+                    }
+
+
                 }
 
                 else
@@ -244,114 +398,136 @@ public class create_solid : MonoBehaviour
                     normals.Add(tot_normal);
                     normals.Add(tot_normal);
 
-                    triangles.Add(10 + i * 4);
-                    triangles.Add(10 + i * 4 + 2);
-                    triangles.Add(10 + i * 4 + 1);
+                    //direction: 1-positive, -1 -negative
+                    if (direct == 1)
+                    {
+                        triangles.Add(10 + i * 4);
+                        triangles.Add(10 + i * 4 + 2);
+                        triangles.Add(10 + i * 4 + 1);
 
 
-                    triangles.Add(10 + i * 4 + 2);
-                    triangles.Add(10 + i * 4 + 3);
-                    triangles.Add(10 + i * 4 + 1);
+                        triangles.Add(10 + i * 4 + 2);
+                        triangles.Add(10 + i * 4 + 3);
+                        triangles.Add(10 + i * 4 + 1);
+                    }
+                    else
+                    {
+                        triangles.Add(10 + i * 4);
+                        
+                        triangles.Add(10 + i * 4 + 1);
+                        triangles.Add(10 + i * 4 + 2);
+
+
+                        triangles.Add(10 + i * 4 + 2);
+                        
+                        triangles.Add(10 + i * 4 + 1);
+                        triangles.Add(10 + i * 4 + 3);
+                    }
+
+
                 }
 
             }
 
 
         }
-    }
-
-    void GenerateFaces(List<Vector3> vertices, List<Vector2> uvs, List<Vector3> normals, List<int> triangles)
-    {
-        int segments = 60;
-        Vector3 temp;
-
-        float angle = 0.0f;
-
-        //bottom
-        for (int i = 0; i < (segments); i++)
+        else if (feature_info.s_feature == 2)
         {
-            temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
-            vertices.Add(temp);
-            uvs.Add(new Vector2((float)i/(segments-1), 0.0f));
-            normals.Add(Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) *feature_info.cir.cir_plane.v);
+            int segments = 60;
+            Vector3 temp;
 
-            angle += (360f / segments);
-        }
-        //top
-        angle = 0.0f;
-        for (int i = 0; i < (segments); i++)
-        {
-            temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
-            temp = temp + +length * direct * feature_info.cir.cir_plane.normal;
-            vertices.Add(temp);
-            uvs.Add(new Vector2((float)i / (segments - 1), 1.0f));
-            normals.Add(Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.v);
+            float angle = 0.0f;
 
-            angle += (360f / segments);
-        }
-
-            for (int i = 0; i < (segments-1); i++)
+            //bottom
+            for (int i = 0; i < (segments); i++)
             {
-                triangles.Add(i);
-                triangles.Add(i + segments);
-                triangles.Add(i+1);
-                
+                temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
+                vertices.Add(temp);
+                uvs.Add(new Vector2((float)i / (segments - 1), 0.0f));
+                normals.Add(Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.v);
 
-                triangles.Add(i +1 );
-                triangles.Add(i + 1 + segments);
-                triangles.Add(i + segments);
+                angle += (360f / segments);
+            }
+            //top
+            angle = 0.0f;
+            for (int i = 0; i < (segments); i++)
+            {
+                temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
+                temp = temp + +length * direct * feature_info.cir.cir_plane.normal;
+                vertices.Add(temp);
+                uvs.Add(new Vector2((float)i / (segments - 1), 1.0f));
+                normals.Add(Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.v);
+
+                angle += (360f / segments);
             }
 
+            //direction: 1-positive, -1 -negative
+            if (direct == 1)
+            {
+                for (int i = 0; i < (segments); i++)
+                {
+                    triangles.Add(i);
+                    if (i + 1 != segments)
+                    {
+                        triangles.Add(i + 1);
+                    }
+                    else
+                    {
+                        triangles.Add(0);
+                    }
+                    triangles.Add(i + segments);
+
+                    if (i + 1 != segments)
+                    {
+                        triangles.Add(i + 1);
+                        triangles.Add(i + 1 + segments);
+                    }
+                    else
+                    {
+                        triangles.Add(0);
+                        triangles.Add(0 + segments);
+                    }
+
+                    triangles.Add(i + segments);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < (segments); i++)
+                {
+                    
+                    if (i + 1 != segments)
+                    {
+                        triangles.Add(i + 1);
+                    }
+                    else
+                    {
+                        triangles.Add(0);
+                    }
+                    triangles.Add(i);
+                    triangles.Add(i + segments);
+
+                    if (i + 1 != segments)
+                    {
+                       
+                        triangles.Add(i + 1 + segments);
+                        triangles.Add(i + 1);
+                    }
+                    else
+                    {
+                       
+                        triangles.Add(0 + segments);
+                        triangles.Add(0);
+                    }
+
+                    triangles.Add(i + segments);
+                }
+            }
+
+
+        }
     }
 
-    void GenerateFaces2(List<Vector3> vertices, List<Vector2> uvs, List<Vector3> normals, List<int> triangles)
-    {
-        int segments = 60;
-        Vector3 temp;
-
-        float angle = 0.0f;
-
-        //bottom
-        for (int i = 0; i < (segments); i++)
-        {
-            temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
-            vertices.Add(temp);
-            uvs.Add(new Vector2((float)i / (segments - 1), 0.0f));
-            normals.Add(feature_info.cir.cir_plane.normal);
-
-            angle += (360f / segments);
-        }
-        //top
-        angle = 0.0f;
-        for (int i = 0; i < (segments); i++)
-        {
-            temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
-            temp = temp + +length * direct * feature_info.cir.cir_plane.normal;
-            vertices.Add(temp);
-            uvs.Add(new Vector2((float)i / (segments - 1), 1.0f));
-            normals.Add(feature_info.cir.cir_plane.normal);
-
-            angle += (360f / segments);
-        }
-
-        vertices.Add(feature_info.cir.center);
-        uvs.Add(new Vector2(0.5f , 0.5f));
-        normals.Add(feature_info.cir.cir_plane.normal);
-
-        vertices.Add(feature_info.cir.center + length * direct * feature_info.cir.cir_plane.normal);
-        uvs.Add(new Vector2(0.5f, 0.5f));
-        normals.Add(feature_info.cir.cir_plane.normal);
-
-
-
-        for (int i = 0; i < (segments - 1); i++)
-        {
-            triangles.Add(2*segments);
-            triangles.Add(i + 1);
-            triangles.Add(i);
-
-        }
-
-    }
+ 
 
 }

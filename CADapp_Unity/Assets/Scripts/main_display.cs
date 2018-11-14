@@ -49,6 +49,8 @@ public class main_display : MonoBehaviour {
                     rend.startWidth = 0.1f;
                     rend.endWidth = 0.1f;
 
+                    rend.loop = true;
+
                     int segments = 60;
                     Vector3[] position= new Vector3[segments];
 

@@ -1993,7 +1993,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   c1: {r: 0, g: 1, b: 0, a: 1}
-  segments: 100
   ToWorld: {fileID: 8800552}
 --- !u!120 &1366793444
 LineRenderer:
