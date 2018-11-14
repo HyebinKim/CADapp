@@ -7,9 +7,7 @@ public class move_camera : MonoBehaviour {
 
     
     Vector3 refPos;
-    Vector3 targetPos;
-    Quaternion targetRot;
-    Quaternion refRot;
+    Vector3 refRot;
     public float moveSpeed = 0.05f;
 
     //GameObject xy;
@@ -21,10 +19,7 @@ public class move_camera : MonoBehaviour {
     // Use this for initialization
     void Start () {
         refPos = new Vector3(15f, 15f, 15f);
-        refRot = Quaternion.Euler(35, -135, 0);
-
-        targetPos = new Vector3(0f, 0f, 15f); //xy
-        targetRot = Quaternion.Euler(0, 180, 0); //xy
+        refRot = new Vector3(-1.0f, -1.0f, -1.0f);
 
         ToMain_Camera();
 
@@ -34,36 +29,25 @@ public class move_camera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-    }
-
-    public void Move_Camera()
-    {
-        transform.position = targetPos;
-        transform.rotation = targetRot;
-        /*
-         *  while (transform.position != targetPos)
-        {
-            transform.position = Vector3.Lerp(transform.position, targetPos, moveSpeed);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, moveSpeed);
-        }
-         */
-
+        feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
     }
 
     public void ToMain_Camera()
     {
         transform.position = refPos;
-        transform.rotation = refRot;
-       
+        transform.rotation = Quaternion.LookRotation(refRot);
+
     }
 
     public void ToPlane_Camera()
     {
-        targetPos = feature_info.nowP.point + 15 * feature_info.nowP.normal;
+        Vector3 targetPos = feature_info.nowP.point + 15.0f * feature_info.nowP.normal;
 
         transform.position = targetPos;
-        transform.rotation = Quaternion.LookRotation(-feature_info.nowP.normal);
+        transform.rotation = Quaternion.LookRotation(-feature_info.nowP.normal, feature_info.nowP.v);
+
+        Debug.Log("normal x=" + feature_info.nowP.normal.x + "y=" + feature_info.nowP.normal.y + "z=" + feature_info.nowP.normal.z);
+        Debug.Log("up x=" + feature_info.nowP.v.x + "y=" + feature_info.nowP.v.y + "z=" + feature_info.nowP.v.z );
     }
 
 }

@@ -13,8 +13,8 @@ public class draw_sketch : MonoBehaviour {
 
 
     public Color c1 = Color.green;
-    Vector3 start = new Vector3(-1, -1, 0);
-    Vector3 end = new Vector3(1, 1, 0);
+    Vector3 start = new Vector3(0, 0, 0);
+    Vector3 end = new Vector3(0, 0, 0);
     Vector3[] positions;
 
     public int segments = 60; //circle segments
@@ -23,27 +23,25 @@ public class draw_sketch : MonoBehaviour {
 
     Main_code feature_info;
 
+    Vector3 temp;
+
     // Use this for initialization
     void Start () {
-        
         feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
     }
 	
 	// Update is called once per frame
 	void Update () {
-        //but_rectangle.GetComponent<Button>();
-        //but_rectangle.gameObject.SetActive(true);
-        //but_rectangle.onClick.AddListener(ModeChange);
+
         ToWorld.GetComponent<Text>();
 
-        var v3 = Input.mousePosition;
-        v3.z = 15.0f;
-        v3 = Camera.main.ScreenToWorldPoint(v3);
-        v3.z = 0.0f;
+        var v2 = Input.mousePosition;
+        
 
-        ToWorld.text = "x="+v3.x +"y="+ v3.y +"!!";
+        var v3 =Camera.main.ScreenToWorldPoint(new Vector3(v2.x, v2.y,15));
 
-        //LineRenderer rend = GetComponent<LineRenderer>();
+        ToWorld.text = "x=" + v3.x + "y=" + v3.z + "z=" + v3.y + "!!";
+
 
         if (feature_info.m_mode == 2)
         {
@@ -66,20 +64,13 @@ public class draw_sketch : MonoBehaviour {
                     positions = new Vector3[4];
                     rend.loop = true;
 
+
                     if (Input.GetMouseButtonDown(0))
                     {
                         click_count = 1;
-
                         start = v3;
-                        end = v3;
 
-                        positions[0] = start;
-                        positions[1] = new Vector3(start.x, end.y, 0);
-                        positions[2] = end;
-                        positions[3] = new Vector3(end.x, start.y, 0);
-
-                        rend.positionCount = positions.Length;
-                        rend.SetPositions(positions);
+                        temp = v3;
 
                     }
                     if (Input.GetMouseButton(0))
@@ -89,9 +80,9 @@ public class draw_sketch : MonoBehaviour {
                         end = v3;
 
                         positions[0] = start;
-                        positions[1] = new Vector3(start.x, end.y, 0);
+                        positions[1] = start + Vector3.Dot(feature_info.nowP.v, (v3 - temp)) * feature_info.nowP.v;
                         positions[2] = end;
-                        positions[3] = new Vector3(end.x, start.y, 0);
+                        positions[3] = start + Vector3.Dot(feature_info.nowP.u, (v3 - temp)) * feature_info.nowP.u;
 
                         rend.positionCount = positions.Length;
                         rend.SetPositions(positions);
@@ -103,9 +94,9 @@ public class draw_sketch : MonoBehaviour {
                         end = v3;
 
                         positions[0] = start;
-                        positions[1] = new Vector3(start.x, end.y, 0);
+                        positions[1] = start + Vector3.Dot(feature_info.nowP.v, (v3 - temp)) * feature_info.nowP.v;
                         positions[2] = end;
-                        positions[3] = new Vector3(end.x, start.y, 0);
+                        positions[3] = start + Vector3.Dot(feature_info.nowP.u, (v3 - temp)) * feature_info.nowP.u;
 
                         rend.positionCount = positions.Length;
                         rend.SetPositions(positions);

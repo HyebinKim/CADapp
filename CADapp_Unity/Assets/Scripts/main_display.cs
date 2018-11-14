@@ -15,12 +15,11 @@ public class main_display : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-
-        LineRenderer rend = GetComponent<LineRenderer>();
-
         //main screen
-        if (feature_info.m_mode != 2)
+        if (feature_info.m_mode != 2 && feature_info.s_feature!=0)
         {
+            LineRenderer rend = GetComponent<LineRenderer>();
+
             switch (feature_info.s_feature)
             {
                 case 0:
@@ -80,10 +79,6 @@ public class main_display : MonoBehaviour {
 
             }
             
-        }
-        else
-        {
-            rend.enabled = false;
         }
 
     }

@@ -7,6 +7,9 @@ public struct plane_def
 {
     public Vector3 point;
     public Vector3 normal;
+
+    public Vector3 u;
+    public Vector3 v;
 }
 
 public struct circle_def
@@ -94,9 +97,9 @@ public class Main_code : MonoBehaviour {
         b_main.SetActive(false);
 
         //xy, yz, zx plane definition
-        xy.point = new Vector3(0, 0, 0); xy.normal = new Vector3(0, 0, 1);
-        yz.point = new Vector3(0, 0, 0); yz.normal = new Vector3(1, 0, 0);
-        zx.point = new Vector3(0, 0, 0); zx.normal = new Vector3(0, 1, 0);
+        xy.point = new Vector3(0, 0, 0); xy.normal = new Vector3(0, 1, 0); xy.u = new Vector3(1, 0, 0); xy.v = new Vector3(0, 0, 1);
+        yz.point = new Vector3(0, 0, 0); yz.normal = new Vector3(1, 0, 0); yz.u = new Vector3(0, 0, 1); yz.v = new Vector3(0, 1, 0);
+        zx.point = new Vector3(0, 0, 0); zx.normal = new Vector3(0, 0, 1); zx.u = new Vector3(0, 1, 0); zx.v = new Vector3(1, 0, 0);
 
         s_feature = 0;
         sketch_m.text = "";
@@ -104,9 +107,9 @@ public class Main_code : MonoBehaviour {
 
         nowP = xy;
 
-        xy_.onClick.AddListener(delegate { Change_plane(xy.point, xy.normal); });
-        yz_.onClick.AddListener(delegate { Change_plane(yz.point, yz.normal); });
-        zx_.onClick.AddListener(delegate { Change_plane(zx.point, zx.normal); });
+        xy_.onClick.AddListener(delegate { Change_plane(xy.point, xy.normal, xy.u, xy.v); });
+        yz_.onClick.AddListener(delegate { Change_plane(yz.point, yz.normal, yz.u, yz.v); });
+        zx_.onClick.AddListener(delegate { Change_plane(zx.point, zx.normal, zx.u, zx.v); });
 
     }
 	
@@ -169,10 +172,12 @@ public class Main_code : MonoBehaviour {
         s_mode = i;
     }
 
-    public void Change_plane(Vector3 point, Vector3 normal)
+    public void Change_plane(Vector3 point, Vector3 normal, Vector3 u, Vector3 v)
     {
         nowP.point = point;
         nowP.normal = normal;
+        nowP.u = u;
+        nowP.v = v;
     }
 
     //feature tree
