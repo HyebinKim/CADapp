@@ -91,7 +91,7 @@ public class Main_code : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //screen
-        Screen.SetResolution(1280, 720, true);
+        Screen.SetResolution(1440, 2960, true); //galaxy
 
 
         m_mode = 0;

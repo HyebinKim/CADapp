@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class draw_sketch : MonoBehaviour {
 
@@ -42,8 +43,19 @@ public class draw_sketch : MonoBehaviour {
 
         ToWorld.text = "x=" + v3.x + "y=" + v3.z + "z=" + v3.y + "!!";
 
+        int UI_click = 0;
 
-        if (feature_info.m_mode == 2)
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0)|| Input.GetMouseButtonUp(0))
+        {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+
+        }
+
+
+        if (feature_info.m_mode == 2 && UI_click==0)
         {
             switch (feature_info.s_mode)
             {
