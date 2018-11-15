@@ -90,6 +90,10 @@ public class Main_code : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        //screen
+        Screen.SetResolution(1280, 720, true);
+
+
         m_mode = 0;
         s_mode = 0;
 
