@@ -466,29 +466,29 @@ public class create_solid : MonoBehaviour
             {
                 for (int i = 0; i < (segments); i++)
                 {
-                    triangles.Add(i);
+                    triangles.Add(i +2*(segments+1));
                     if (i + 1 != segments)
                     {
-                        triangles.Add(i + 1);
+                        triangles.Add(i + 1 + 2 * (segments + 1));
                     }
                     else
                     {
-                        triangles.Add(0);
+                        triangles.Add(0 + 2 * (segments + 1));
                     }
-                    triangles.Add(i + segments);
+                    triangles.Add(i + segments + 2 * (segments + 1));
 
                     if (i + 1 != segments)
                     {
-                        triangles.Add(i + 1);
-                        triangles.Add(i + 1 + segments);
+                        triangles.Add(i + 1 + 2 * (segments + 1));
+                        triangles.Add(i + 1 + segments + 2 * (segments + 1));
                     }
                     else
                     {
-                        triangles.Add(0);
-                        triangles.Add(0 + segments);
+                        triangles.Add(0 + 2 * (segments + 1));
+                        triangles.Add(0 + segments + 2 * (segments + 1));
                     }
 
-                    triangles.Add(i + segments);
+                    triangles.Add(i + segments + 2 * (segments + 1));
                 }
             }
             else
@@ -498,29 +498,29 @@ public class create_solid : MonoBehaviour
                     
                     if (i + 1 != segments)
                     {
-                        triangles.Add(i + 1);
+                        triangles.Add(i + 1 + 2 * (segments + 1));
                     }
                     else
                     {
-                        triangles.Add(0);
+                        triangles.Add(0 + 2 * (segments + 1));
                     }
-                    triangles.Add(i);
-                    triangles.Add(i + segments);
+                    triangles.Add(i + 2 * (segments + 1));
+                    triangles.Add(i + segments + 2 * (segments + 1));
 
                     if (i + 1 != segments)
                     {
                        
-                        triangles.Add(i + 1 + segments);
-                        triangles.Add(i + 1);
+                        triangles.Add(i + 1 + segments + 2 * (segments + 1));
+                        triangles.Add(i + 1 + 2 * (segments + 1));
                     }
                     else
                     {
                        
-                        triangles.Add(0 + segments);
-                        triangles.Add(0);
+                        triangles.Add(0 + segments + 2 * (segments + 1));
+                        triangles.Add(0 + 2 * (segments + 1));
                     }
 
-                    triangles.Add(i + segments);
+                    triangles.Add(i + segments + 2 * (segments + 1));
                 }
             }
 
