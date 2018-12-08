@@ -88,7 +88,7 @@ public class draw_sketch : MonoBehaviour {
 
                 case 1: //rectangle
                     begin_.text = "two";
-
+                    LineRenderer rend = GetComponent<LineRenderer>();
                     Vector3[] positions = new Vector3[4];
                     rend.loop = true;
                     begin_.text = "three";
@@ -104,12 +104,12 @@ public class draw_sketch : MonoBehaviour {
                     begin_.text = "five";
 
 
-                    /*
+                    
                      // touch_info.single_update();
 
                     //if (touch_info.touch1 == 0) return;
 
-                    LineRenderer rend = GetComponent<LineRenderer>();
+                    
                     rend.material = new Material(Shader.Find("Particles/Additive"));
 
                     rend.startColor = c1;
@@ -153,10 +153,9 @@ public class draw_sketch : MonoBehaviour {
                         feature_info.rec[i] = positions[i];
                     }
                      
-                     */
+                     
 
-
-                    /*
+                    
                      if (Input.GetMouseButtonDown(0))
                     {
                         click_count = 1;
@@ -200,8 +199,7 @@ public class draw_sketch : MonoBehaviour {
 
                     
                      
-                     */
-
+                     
 
 
 
@@ -212,7 +210,7 @@ public class draw_sketch : MonoBehaviour {
 
                     end_.text = "circle";
 
-                    /*
+                    
                      LineRenderer rend2 = GetComponent<LineRenderer>();
                     rend2.material = new Material(Shader.Find("Particles/Additive"));
 
@@ -295,7 +293,7 @@ public class draw_sketch : MonoBehaviour {
                     }
                      
                      
-                     */
+                     
 
 
 

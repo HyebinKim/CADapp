@@ -34,14 +34,17 @@ public class create_solid : MonoBehaviour
 
     //call mainUI
     Main_code feature_info;
+    Touch_main touch_info;
 
     //parameter
-    public float length=2.0f;
+    public float length=2.0f; 
     public int direct = 1;
 
     void Start()
     {
         feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
+        touch_info = GameObject.Find("Touch").GetComponent<Touch_main>();
+        length = Vector2.Distance(touch_info.begin1, touch_info.end1);
     }
 
     void Update()
@@ -54,6 +57,8 @@ public class create_solid : MonoBehaviour
                     break;
                 case 1: //extrusion
                         Filter.sharedMesh = Build();
+                        
+                        
                     break;
                 case 2: //cut extrusion
                     
