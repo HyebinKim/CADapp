@@ -16,19 +16,38 @@ public class draw_sketch : MonoBehaviour {
     public Color c1 = Color.green;
     Vector3 start = new Vector3(0, 0, 0);
     Vector3 end = new Vector3(0, 0, 0);
-    Vector3[] positions;
+    //Vector3[] positions;
 
     int segments = 60; //circle segments
 
     public Text ToWorld;
 
+    public Text begin_;
+    public Text end_;
+
+
     Main_code feature_info;
+    Touch_main touch_info;
 
     Vector3 temp;
+
+    LineRenderer rend;
+
 
     // Use this for initialization
     void Start () {
         feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
+        touch_info = GameObject.Find("Touch").GetComponent<Touch_main>();
+
+        rend = GetComponent<LineRenderer>();
+        rend.material = new Material(Shader.Find("Particles/Additive"));
+        begin_.text = "one";
+
+        rend.startColor = c1;
+        rend.endColor = c1;
+        rend.startWidth = 0.1f;
+        rend.endWidth = 0.1f;
+
     }
 	
 	// Update is called once per frame
@@ -54,16 +73,41 @@ public class draw_sketch : MonoBehaviour {
 
         }
 
+        //begin_.text = feature_info.m_mode.ToString();
+        //end_.text = feature_info.s_mode.ToString();
 
-        if (feature_info.m_mode == 2 && UI_click==0)
+
+        //if (feature_info.m_mode == 2 && UI_click==0)
+        if (feature_info.m_mode == 2)
         {
             switch (feature_info.s_mode)
             {
                 case 0: // not selected
-
+                    end_.text = "nonselected";
                     break;
 
                 case 1: //rectangle
+                    begin_.text = "two";
+
+                    Vector3[] positions = new Vector3[4];
+                    rend.loop = true;
+                    begin_.text = "three";
+
+                    positions[0] = new Vector3(-2f, 0f, 2f);
+                    positions[1] = new Vector3(-2f, 0f, -2f);
+                    positions[2] = new Vector3(2f, 0f, -2f);
+                    positions[3] = new Vector3(2f, 0f, 2f);
+                    begin_.text = "four";
+
+                    rend.positionCount = positions.Length;
+                    rend.SetPositions(positions);
+                    begin_.text = "five";
+
+
+                    /*
+                     // touch_info.single_update();
+
+                    //if (touch_info.touch1 == 0) return;
 
                     LineRenderer rend = GetComponent<LineRenderer>();
                     rend.material = new Material(Shader.Find("Particles/Additive"));
@@ -76,9 +120,44 @@ public class draw_sketch : MonoBehaviour {
                     positions = new Vector3[4];
                     rend.loop = true;
 
+                    Vector2 temp1 = new Vector2(500, 600);
+                    Vector2 temp2 = new Vector2(600, 500);
+
+                    //if (touch_info.count==1)
+                    //{
+                    //    temp2= touch_info.touch_point;
+                   // }
+
+
                     feature_info.rec_plane = feature_info.nowP;
 
-                    if (Input.GetMouseButtonDown(0))
+                    //start = Camera.main.ScreenToWorldPoint(new Vector3(touch_info.begin1.x, touch_info.begin1.y, 15));
+                    //end = Camera.main.ScreenToWorldPoint(new Vector3(touch_info.end1.x, touch_info.end1.y, 15));
+
+                    start = Camera.main.ScreenToWorldPoint(new Vector3(temp1.x, temp1.y, 15));
+                    end = Camera.main.ScreenToWorldPoint(new Vector3(temp2.x, temp2.y, 15));
+
+                    begin_.text = "pos:" + start.x + "  " + start.y + "  " + start.z;
+                    end_.text = "pos:" + end.x + "  " + end.y + "  " + end.z;
+
+                    positions[0] = start;
+                    positions[1] = start + Vector3.Dot(feature_info.nowP.v, (end - start)) * feature_info.nowP.v;
+                    positions[2] = end;
+                    positions[3] = start + Vector3.Dot(feature_info.nowP.u, (end - start)) * feature_info.nowP.u;
+
+                    rend.positionCount = positions.Length;
+                    rend.SetPositions(positions);
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        feature_info.rec[i] = positions[i];
+                    }
+                     
+                     */
+
+
+                    /*
+                     if (Input.GetMouseButtonDown(0))
                     {
                         click_count = 1;
                         start = v3;
@@ -119,12 +198,22 @@ public class draw_sketch : MonoBehaviour {
                         }
                     }
 
+                    
+                     
+                     */
+
+
+
+
                     break;
                 
                 //circle
                 case 2:
 
-                    LineRenderer rend2 = GetComponent<LineRenderer>();
+                    end_.text = "circle";
+
+                    /*
+                     LineRenderer rend2 = GetComponent<LineRenderer>();
                     rend2.material = new Material(Shader.Find("Particles/Additive"));
 
                     rend2.startColor = c1;
@@ -204,6 +293,11 @@ public class draw_sketch : MonoBehaviour {
                         feature_info.cir.center = center;
                         feature_info.cir.radius = radius;
                     }
+                     
+                     
+                     */
+
+
 
                     break;
 

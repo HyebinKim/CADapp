@@ -1,6 +1,6 @@
 Android
 PlayerPath?
-C:/Users/helen/Desktop/test3.apk
+C:/Users/helen/Desktop/test5f.apk
 SceneListBegin?
 Assets/Main_3d.unity
 SceneListEnd?
@@ -142,7 +142,7 @@ da21fc3f8056b1f91c3dd09c7bf4f90a UnityEngine.Networking.dll:UnityEngine.Networki
 fc061f3ae8a876c0687e86378d4a447c UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformChild
 7ca56e063bd071986fff4f513cc4f477 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformVisualizer
 052f9f6ce09628256ee5bb3609277970 Assembly-CSharp.dll:.Main_code
-cda892165fb1aacc637a7f92b080e96a Assembly-CSharp.dll:.draw_sketch
+fc1c715921ea868881f0c3a4d7066d19 Assembly-CSharp.dll:.draw_sketch
 72a8523b432c0a5317826b7a9e0a0e79 Unity.TextMeshPro.dll:TMPro.PackageResourceImporterWindow
 e53cc67d84060d628c7f03fc725766d8 Unity.TextMeshPro.dll:TMPro.TMP_FontAsset
 392c5b921098bd4c139d9146d0efa6d7 Unity.TextMeshPro.dll:TMPro.TMP_Settings
@@ -169,3 +169,4 @@ e04611b8715e6833d2bd7010fc6be10b Unity.TextMeshPro.dll:TMPro.TMP_StyleSheet
 2f9af06a78208a67db480e9bfed4a076 Unity.TextMeshPro.dll:TMPro.TextMeshPro
 9318334b30e9f195f573b2ce00154b95 Unity.TextMeshPro.dll:TMPro.TMP_ColorGradient
 93307bd34e39d73fd24e00ec39c25a91 Unity.TextMeshPro.dll:TMPro.TMP_SubMesh
+88cf611f0c61050b1851f03f6e8b11dd Assembly-CSharp.dll:.Touch_main

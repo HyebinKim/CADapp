@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\main_display.cs" />
      <Compile Include="Assets\Scripts\MeshExtrusion.cs" />
      <Compile Include="Assets\Scripts\move_camera.cs" />
+     <Compile Include="Assets\Scripts\Touch_main.cs" />
  <Reference Include="UnityEditor.StandardEvents">
  <HintPath>C:/Users/helen/Desktop/CADapp/CADapp/CADapp_Unity/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>
