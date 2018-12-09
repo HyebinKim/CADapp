@@ -106,12 +106,24 @@ public class Touch_main : MonoBehaviour {
         switch (feature_info.m_mode)
         {
             case 0:
-                if (count == 1)//rotaing
+                //rotaing
+                if (count == 1)
                 {
+                    Vector2 change = end1 - begin1;
+                    if (change.magnitude > 100f)
+                    {
 
+                        rotate_v = change;
+                        touch11.text = "panning";
+                    }
+                    else
+                    {
+                        rotate_v = new Vector2(0,0);
+
+                    }
                 }
-                
-                if (count == 2)//zooming
+                //zooming
+                if (count == 2)
                 {
                     Vector2 change1 = end1 - begin1;
                     Vector2 change2 = end2 - begin2;
@@ -167,11 +179,11 @@ public class Touch_main : MonoBehaviour {
                     if (count == 2)
                     {
                         Vector2 change = (end1 - begin1);
-                        change.y *= 0.02f; //sensitivity
+                        //change.y *= 0.02f; //sensitivity
                         change.y = Mathf.Round(change.y*10) * 0.1f;
-                        if (change.y >= 0.1f || change.y <= -0.1f)
+                        if (change.y >= 20f || change.y <= -20f)
                         {
-                            length_v = change.y;
+                            length_v = change.y *0.02f;
                             g_type = "change";
                         }
                         else

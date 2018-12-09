@@ -56,13 +56,18 @@ public class move_camera : MonoBehaviour {
 	void Update () {
         feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
 
-        zooming(touch_info.zoom_v *0.01f);
-        
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (feature_info.m_mode == 0)
         {
-            rotating(10f, 10f);
+            zooming(touch_info.zoom_v * 0.01f);
+
+            if (touch_info.count == 1)
+            {
+                rotating(touch_info.rotate_v.x, touch_info.rotate_v.y);
+
+            }
         }
-        
+
+        //rotating(touch_info.rotate_v.x, touch_info.rotate_v.y);
 
     }
 
@@ -101,14 +106,22 @@ public class move_camera : MonoBehaviour {
     //rotating
     public void rotating(float _x, float _y)
     {
-        transform.RotateAround(point, new Vector3(0.0f, 0.0f, 1.0f), 5 * 5f);
+        //Vector3 change = new Vector3(Input.GetAxis("Vertical") * _y, Input.GetAxis("Horizontal") * _x, 0);
+        Vector3 temp1 = Camera.main.transform.up * _x;
+        Vector3 temp2 = Camera.main.transform.right * _y*(-1f);
+        Vector3 change = temp1 + temp2;
+        //Vector3 change = Camera.main.ScreenToWorldPoint(new Vector3(_x, _y, 15));
+        transform.RotateAround(point, change, 1f);
+
+        //transform.RotateAround(point, new Vector3(0.0f, 0.0f, 1.0f), 5 * 5f);
+
         //float _localRotX = Input.GetAxis("Mouse X")*_x;
         //float _localRotY = Input.GetAxis("Vertical")*_y;
 
         //Quaternion QT = Quaternion.Euler(_localRotY, _localRotX, 0);
 
         //this._XForm_Parent.rotation = Quaternion.Lerp(_XForm_Parent.rotation, QT, Time.deltaTime * OrbitDampening);
-       // this._XForm_Camera.localPosition = new Vector3(0f, 0f, Mathf.Lerp(this._XForm_Camera.localPosition.z, this._CameraDistance * -1f, Time.deltaTime * ScrollDampening));
+        // this._XForm_Camera.localPosition = new Vector3(0f, 0f, Mathf.Lerp(this._XForm_Camera.localPosition.z, this._CameraDistance * -1f, Time.deltaTime * ScrollDampening));
 
     }
 

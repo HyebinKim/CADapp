@@ -54,6 +54,8 @@ public class Main_code : MonoBehaviour {
     public GameObject b_solid;
     public GameObject b_extrusion;
 
+    public GameObject b_view;
+
     //state
     public int s_feature;
 
@@ -102,6 +104,8 @@ public class Main_code : MonoBehaviour {
         poly.SetActive(false);
         reset.SetActive(false);
         b_main.SetActive(false);
+        b_extrusion.SetActive(false);
+
 
         //xy, yz, zx plane definition
         xy.point = new Vector3(0, 0, 0); xy.normal = new Vector3(0, 1, 0); xy.u = new Vector3(1, 0, 0); xy.v = new Vector3(0, 0, 1);
@@ -128,6 +132,7 @@ public class Main_code : MonoBehaviour {
             case 0:
                 b_sketch.SetActive(true);
                 b_solid.SetActive(true);
+                b_view.SetActive(true);
 
                 b_main.SetActive(false);
                 rectangle.SetActive(false);
@@ -150,6 +155,7 @@ public class Main_code : MonoBehaviour {
 
                 b_sketch.SetActive(false);
                 b_solid.SetActive(false);
+                b_view.SetActive(false);
 
                 break;
 
@@ -159,6 +165,7 @@ public class Main_code : MonoBehaviour {
 
                 b_solid.SetActive(false);
                 b_sketch.SetActive(false);
+                b_view.SetActive(false);
 
                 break;
 
