@@ -24,6 +24,8 @@ public class Touch_main : MonoBehaviour {
     public Vector2 move2;
     public Vector2 end2;
 
+    Main_code feature_info;
+    public string g_type;
 
 
     // Use this for initialization
@@ -31,67 +33,101 @@ public class Touch_main : MonoBehaviour {
         touch1 = 0;
         touch2 = 0;
 
+        feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
+        g_type = "none";
     }
 	
 	// Update is called once per frame
 	void Update () {
 
+        if (EventSystem.current.currentSelectedGameObject != null)
+        {
+            touch_state.text = "UI!!!!";
+            return;
+        }
+
+
         count = Input.touchCount;
 
-        switch (count)
+        //get touch information
+        if(count==1 || count == 2)
+        {
+            switch (Input.GetTouch(0).phase)
+            {
+                case TouchPhase.Began:
+                    begin1 = Input.GetTouch(0).position;
+                    end1 = begin1;
+                    break;
+                case TouchPhase.Moved:
+                    move1 = Input.GetTouch(0).position;
+                    end1 = move1;
+                    break;
+                case TouchPhase.Ended:
+                    end1 = Input.GetTouch(0).position;
+                    break;
+                default:
+                    break;
+            }
+
+            if (count == 2)
+            {
+                switch (Input.GetTouch(1).phase)
+                {
+                    case TouchPhase.Began:
+                        begin2 = Input.GetTouch(1).position;
+                        break;
+                    case TouchPhase.Moved:
+                        move2 = Input.GetTouch(1).position;
+                        break;
+                    case TouchPhase.Ended:
+                        end2 = Input.GetTouch(1).position;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+
+        //gesture identification
+        switch (feature_info.m_mode)
         {
             case 0:
-                touch_state.text = "none";
-                break;
+                if (count == 1)//rotaing
+                {
 
+                }
+                
+                if (count == 2)//zooming
+                {
+
+                }
+                
+
+                break;
             case 1:
-                touch_state.text = "single";
-                touch_point = Input.GetTouch(0).position;
-                touch_pos.text = "x=" + touch_point.x + " ,  y=" + touch_point.y;
-
                 break;
-
             case 2:
-                touch_state.text = "double";
-                break;
+                //sketch
+                if (count == 1)
+                {
 
+                }
+
+                break;
+            case 3:
+                //change length
+                if (feature_info.s_mode == 1) //extrusion
+                {
+
+                }
+                break;
             default:
-                touch_state.text = "infinite";
                 break;
-
         }
+
+       
 		
 	}
-
-    public void single_update()
-    {
-        if (Input.touchCount != 1)
-            return;
-
-        if (Input.GetTouch(0).phase == TouchPhase.Began)
-        {
-            //value initialization
-            begin1 = new Vector2();
-            end1 = new Vector2();
-            touch1 = 0;
-            touch_state2.text = "begin";
-
-            begin1 = Input.GetTouch(0).position;
-            end1 = begin1;
-
-        }
-        if (Input.GetTouch(0).phase == TouchPhase.Moved)
-        {
-            end1 = Input.GetTouch(0).position;
-        }
-        if (Input.GetTouch(0).phase == TouchPhase.Ended)
-        {
-            touch_state2.text = "end";
-            end1 = Input.GetTouch(0).position;
-            touch1 = 1;
-        }
-
-
-    }
-
+    
 }

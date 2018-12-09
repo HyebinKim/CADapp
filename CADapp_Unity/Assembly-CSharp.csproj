@@ -53,7 +53,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Rotating.cs" />
      <Compile Include="Assets\Scripts\create_solid.cs" />
      <Compile Include="Assets\Scripts\draw_sketch.cs" />
      <Compile Include="Assets\Scripts\Main_code.cs" />
