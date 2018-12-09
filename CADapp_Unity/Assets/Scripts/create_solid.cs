@@ -9,7 +9,10 @@ public class create_solid : MonoBehaviour
     new MeshRenderer renderer;
 
     //setting
-    public MeshFilter Filter
+
+
+     
+      public MeshFilter Filter
     {
         get
         {
@@ -30,38 +33,79 @@ public class create_solid : MonoBehaviour
             }
             return renderer;
         }
-    }
+    }   
+         
+
+
 
     //call mainUI
     Main_code feature_info;
+    Touch_main touch_info;
 
     //parameter
-    public float length=2.0f;
+    public float length=0.0f;
+    float length_save = 0.0f;
     public int direct = 1;
+
+    public Text text_length;
 
     void Start()
     {
         feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
+        touch_info = GameObject.Find("Touch").GetComponent<Touch_main>();
+
+        length_save = 0.0f;
+        length = 0.0f;
+        text_length.text = "";
     }
 
     void Update()
     {
+
         if (feature_info.m_mode == 3)
         {
             switch (feature_info.s_mode)
             {
                 case 0:
+                    text_length.text = "";
                     break;
                 case 1: //extrusion
-                        Filter.sharedMesh = Build();
+
+                    length = length_save + touch_info.length_v;
+                    text_length.text = "Length= " + Mathf.Round(length*10) * 0.1f;
+
+                    if (length >= 0)
+                    {
+                        direct = 1;
+                    }
+                    else
+                    {
+                        direct = -1;
+                    }
+
+                    Filter.sharedMesh = Build(); //mesh 반환
+
+                    if (touch_info.touch1 == 1)
+                    {
+                        length_save = length;
+                    }
+
                     break;
                 case 2: //cut extrusion
-                    
+                    text_length.text = "Length=";
+
+
+
                     break;
                 default:
+                    text_length.text = "";
                     break;
             }
 
+        }
+        else
+        {
+            text_length.text = "";
         }
     }
 
@@ -112,7 +156,7 @@ public class create_solid : MonoBehaviour
             //top
             for (int i = 0; i < 4; i++)
             {
-                vertices.Add(feature_info.rec[i]+length*direct * feature_info.rec_plane.normal);
+                vertices.Add(feature_info.rec[i]+length * feature_info.rec_plane.normal);
                 normals.Add(direct * feature_info.rec_plane.normal);
 
             }
@@ -126,7 +170,7 @@ public class create_solid : MonoBehaviour
             uvs.Add(new Vector2(0.5f, 0.5f));
             normals.Add(-direct * feature_info.rec_plane.normal);
 
-            vertices.Add(center + length * direct * feature_info.rec_plane.normal);
+            vertices.Add(center + length  * feature_info.rec_plane.normal);
             uvs.Add(new Vector2(0.5f, 0.5f));
             normals.Add(direct * feature_info.rec_plane.normal);
 
@@ -236,7 +280,7 @@ public class create_solid : MonoBehaviour
             for (int i = 0; i < (segments); i++)
             {
                 temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
-                temp = temp + +length * direct * feature_info.cir.cir_plane.normal;
+                temp = temp + +length  * feature_info.cir.cir_plane.normal;
                 vertices.Add(temp);
                 uvs.Add(new Vector2((float)i / (segments - 1), 1.0f));
                 normals.Add(direct * feature_info.cir.cir_plane.normal);
@@ -249,7 +293,7 @@ public class create_solid : MonoBehaviour
             //normals.Add(new Vector3(0, 0, 1));
             normals.Add(-direct * feature_info.cir.cir_plane.normal);
 
-            vertices.Add(feature_info.cir.center + length * direct * feature_info.cir.cir_plane.normal);
+            vertices.Add(feature_info.cir.center + length  * feature_info.cir.cir_plane.normal);
             uvs.Add(new Vector2(0.5f, 0.5f));
             normals.Add(direct * feature_info.cir.cir_plane.normal);
 
@@ -453,7 +497,7 @@ public class create_solid : MonoBehaviour
             for (int i = 0; i < (segments); i++)
             {
                 temp = feature_info.cir.center + Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.radius.x * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.radius.y * feature_info.cir.cir_plane.v;
-                temp = temp + +length * direct * feature_info.cir.cir_plane.normal;
+                temp = temp + +length * feature_info.cir.cir_plane.normal;
                 vertices.Add(temp);
                 uvs.Add(new Vector2((float)i / (segments - 1), 1.0f));
                 normals.Add(Mathf.Cos(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * feature_info.cir.cir_plane.v);

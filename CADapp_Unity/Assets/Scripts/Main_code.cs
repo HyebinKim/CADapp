@@ -237,6 +237,9 @@ public class Main_code : MonoBehaviour {
 
     }
 
-
+    public void Exit()
+    {
+        Application.Quit();
+    }
 
 }

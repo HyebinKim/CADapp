@@ -56,18 +56,13 @@ public class move_camera : MonoBehaviour {
 	void Update () {
         feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            zooming(1f);
-            //rotating(10f, 0f);
-        }else if (Input.GetKeyDown(KeyCode.RightArrow)){
-            zooming(-1f);
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        zooming(touch_info.zoom_v *0.01f);
+        
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             rotating(10f, 10f);
         }
-        //transform.RotateAround(point, new Vector3(0.0f, 0.0f, 1.0f), 5 * 5f);
+        
 
     }
 
@@ -96,9 +91,9 @@ public class move_camera : MonoBehaviour {
     //zoom in, out
     public void zooming(float d)
     {
-        if (camera_viewsize + d <= 0)
+        if (camera_viewsize + d* camera_viewsize <= 0.1)
             return;
-        camera_viewsize += d;
+        camera_viewsize += d* camera_viewsize;
         Camera.main.orthographicSize = camera_viewsize;
 
     }
