@@ -28,6 +28,8 @@ public class Main_code : MonoBehaviour {
     // 1: selection mode
     // 2: sketch mode
     // 3; solid mode
+    // 4; gyro mode
+
     public int s_mode;
     // 1-0: not selected
     // 1-1: plane selection
@@ -55,6 +57,8 @@ public class Main_code : MonoBehaviour {
     public GameObject b_extrusion;
 
     public GameObject b_view;
+
+    public GameObject b_gyro;
 
     //state
     public int s_feature;
@@ -130,6 +134,7 @@ public class Main_code : MonoBehaviour {
                 b_sketch.SetActive(true);
                 b_solid.SetActive(true);
                 b_view.SetActive(true);
+                b_gyro.SetActive(true);
 
                 b_main.SetActive(false);
                 rectangle.SetActive(false);
@@ -153,6 +158,7 @@ public class Main_code : MonoBehaviour {
                 b_sketch.SetActive(false);
                 b_solid.SetActive(false);
                 b_view.SetActive(false);
+                b_gyro.SetActive(false);
 
                 break;
 
@@ -163,6 +169,7 @@ public class Main_code : MonoBehaviour {
                 b_solid.SetActive(false);
                 b_sketch.SetActive(false);
                 b_view.SetActive(false);
+                b_gyro.SetActive(false);
 
                 break;
 
