@@ -217,6 +217,7 @@ public class Main_code : MonoBehaviour {
                 b_sketch.SetActive(false);
                 b_solid.SetActive(false);
                 b_view.SetActive(false);
+                b_gyro.SetActive(false);
 
                 break;
 
@@ -227,6 +228,7 @@ public class Main_code : MonoBehaviour {
                 b_solid.SetActive(false);
                 b_sketch.SetActive(false);
                 b_view.SetActive(false);
+                b_gyro.SetActive(false);
 
                 break;
 

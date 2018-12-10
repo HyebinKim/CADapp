@@ -13,6 +13,11 @@ public class GyroControl : MonoBehaviour
     private GameObject cameraContainer;
     private Quaternion rot;
 
+    public int gyro_on;
+
+    Vector3 refPos;
+    Vector3 refRot;
+
     private void Start()
     {
         feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
@@ -21,11 +26,8 @@ public class GyroControl : MonoBehaviour
         cameraContainer.transform.position = transform.position;
         transform.SetParent(cameraContainer.transform);
 
-        gyroEnabled = EnableGyro();
-    }
+        //gyroEnabled = EnableGyro();
 
-    private bool EnableGyro()
-    {
         if (SystemInfo.supportsGyroscope)
         {
             gyro = Input.gyro;
@@ -34,17 +36,47 @@ public class GyroControl : MonoBehaviour
             cameraContainer.transform.rotation = Quaternion.Euler(90f, 90f, 0f);
             rot = new Quaternion(0, 0, 1, 0);
 
-            return true;
+            gyroEnabled = true;
+        }
+        else
+        {
+            gyroEnabled = false;
         }
 
-        return false;
+        gyro_on = -1; //off
+
+        refPos = new Vector3(15f, 15f, 15f);
+        refRot = new Vector3(-1.0f, -1.0f, -1.0f);
+
     }
 
-    private void Update()
+    public void EnableGyro()
     {
-        if (gyroEnabled)
+        gyro_on *= (-1);
+    }
+
+    void Update()
+    {
+        if (feature_info.m_mode == 0)
         {
-            transform.localRotation = gyro.attitude * rot;
+            if (gyroEnabled && gyro_on==1)
+            {
+                transform.position = refPos;
+                transform.rotation = Quaternion.LookRotation(refRot);
+
+                transform.localRotation = gyro.attitude * rot;
+
+                Camera.main.backgroundColor = Color.gray;
+            }
+            else
+            {
+                Camera.main.backgroundColor = Color.black;
+            }
         }
+        else
+        {
+            Camera.main.backgroundColor = Color.black;
+        }
+        
     }
 }
