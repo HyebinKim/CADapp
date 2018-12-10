@@ -85,9 +85,7 @@ public class Main_code : MonoBehaviour {
     public Vector3[] rec = new Vector3[4];
     public plane_def rec_plane;
 
-    //feature 
-    public Text sketch_m;
-    public Text solid_m;
+
 
 
 	// Use this for initialization
@@ -113,8 +111,7 @@ public class Main_code : MonoBehaviour {
         zx.point = new Vector3(0, 0, 0); zx.normal = new Vector3(0, 0, 1); zx.u = new Vector3(0, 1, 0); zx.v = new Vector3(1, 0, 0);
 
         s_feature = 0;
-        sketch_m.text = "";
-        solid_m.text = "";
+
 
         nowP = xy;
 
@@ -219,28 +216,7 @@ public class Main_code : MonoBehaviour {
 
         }
 
-        //sketch 객체 생성
-        if (s_feature != 0)
-        {
-            Text NewSketch = Instantiate(sketch_m) as Text;
-            if (s_feature == 1)
-            {
-                NewSketch.text = "- Rectangle 1";
-                //sketch_m.text = "Rectangle 1";
-            }
-            else if (s_feature == 2)
-            {
-                NewSketch.text = "- Circle 1";
-            }
-            NewSketch.transform.SetParent(xy_plane.transform);
-            NewSketch.transform.localPosition = new Vector3(120, -5, 0);
-            NewSketch.color = Color.white;
-
-            //sketch_m.transform.position = new Vector3(400, 50, 0);
-            //sketch_m.color = Color.white;
-        }
-
-        //feature_info.s_feature = 0;
+        
 
     }
 
