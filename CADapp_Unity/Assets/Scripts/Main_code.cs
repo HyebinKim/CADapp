@@ -92,6 +92,8 @@ public class Main_code : MonoBehaviour {
 
     public GameObject b_view;
 
+    public GameObject b_gyro;
+
     //state
     public int s_feature;
 
@@ -191,6 +193,7 @@ public class Main_code : MonoBehaviour {
                 b_sketch.SetActive(true);
                 b_solid.SetActive(true);
                 b_view.SetActive(true);
+                b_gyro.SetActive(true);
 
                 b_main.SetActive(false);
                 rectangle.SetActive(false);
