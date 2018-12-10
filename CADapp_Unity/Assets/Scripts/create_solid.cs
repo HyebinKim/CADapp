@@ -83,7 +83,7 @@ public class create_solid : MonoBehaviour
                         direct = -1;
                     }
 
-                    Filter.sharedMesh = Build(); //mesh 반환
+                    Filter.sharedMesh = Build(0); //mesh 반환
 
                     if (touch_info.touch1 == 1)
                     {
@@ -109,7 +109,7 @@ public class create_solid : MonoBehaviour
         }
     }
 
-    Mesh Build()
+    Mesh Build(int parent)
     {
         var mesh = new Mesh();
 
@@ -121,6 +121,10 @@ public class create_solid : MonoBehaviour
         //create top, bottom face: GenerateCap
         GenerateCap(vertices, uvs, normals, triangles);
         GenerateSide(vertices, uvs, normals, triangles);
+
+        //making mesh
+
+        //total mesh
 
         mesh.vertices = vertices.ToArray();
         mesh.uv = uvs.ToArray();

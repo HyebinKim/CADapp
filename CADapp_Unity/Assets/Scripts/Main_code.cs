@@ -15,9 +15,45 @@ public struct plane_def
 public struct circle_def
 {
     public Vector3 center;
-    public Vector2 radius;
+    public Vector2 radius; //x=u_radius, y=v_radius
 
     public plane_def cir_plane;
+}
+
+public struct feature_def
+{
+    public int type; //0: sketch rec, 1: sketch circle, 2: extrusion, 3: cut extrusion
+    //public int number;
+    public int parent_feature_number;
+
+    public List<int> comp_numb; //type(line/ face)
+    // rec: cube: 6 faces, cylinder: 3 faces
+}
+
+public struct line_def
+{
+    //public int number;
+    public int type; //0: rec, 1: circle
+
+    public Vector3 center;
+    public Vector2 radius; //x=u_radius, y=v_radius
+
+    public plane_def plane;
+}
+
+public struct face_def
+{
+    public int parent_feature_number;
+    //public int number;
+    public int type; //0: flat rec, 1: flat circle, 2: curve
+
+    public plane_def plane;
+    //point=center
+
+    public Vector3 center;
+    public Vector2 radius; //x=u_radius, y=v_radius
+
+    public Mesh mesh;
 }
 
 public class Main_code : MonoBehaviour {
@@ -66,6 +102,10 @@ public class Main_code : MonoBehaviour {
     public plane_def yz;
     public plane_def zx;
 
+    //current plane
+    public plane_def nowP;
+
+    //UI
     public Text xy_plane;
     public Text yz_plane;
     public Text zx_plane;
@@ -74,10 +114,6 @@ public class Main_code : MonoBehaviour {
     public Button yz_;
     public Button zx_;
 
-    //current plane
-    public plane_def nowP;
-
-
     //circle
     public circle_def cir;
 
@@ -85,11 +121,25 @@ public class Main_code : MonoBehaviour {
     public Vector3[] rec = new Vector3[4];
     public plane_def rec_plane;
 
+    /// <summary>
+    /// data base
+    /// 1. feture
+    /// 2. line: sketch
+    /// 3. face: solid
+    /// </summary>
 
+    public List<feature_def> feature_collect;
+    public List<line_def> line_collect;
+    public List<face_def> face_collect;
 
+    public int selected_num;
 
-	// Use this for initialization
-	void Start () {
+    public Text t_feature;
+    public Text t_line;
+    public Text t_face;
+
+    // Use this for initialization
+    void Start () {
         //screen
         Screen.SetResolution(1280, 720, true); //galaxy
 
@@ -112,18 +162,29 @@ public class Main_code : MonoBehaviour {
 
         s_feature = 0;
 
-
         nowP = xy;
 
         xy_.onClick.AddListener(delegate { Change_plane(xy.point, xy.normal, xy.u, xy.v); });
         yz_.onClick.AddListener(delegate { Change_plane(yz.point, yz.normal, yz.u, yz.v); });
         zx_.onClick.AddListener(delegate { Change_plane(zx.point, zx.normal, zx.u, zx.v); });
 
+        feature_collect = new List<feature_def>();
+        line_collect = new List<line_def>();
+        face_collect=new List<face_def>();
+
+        selected_num = -1; //non selected
     }
 	
 	// Update is called once per frame
 	void Update () {
 
+        
+        t_feature.text = "feature:" + feature_collect.Count;
+        t_line.text = "line:" + line_collect.Count;
+        t_face.text = "face:" + face_collect.Count;
+
+
+        //button activation
         switch (m_mode)
         {
             case 0:
@@ -183,6 +244,7 @@ public class Main_code : MonoBehaviour {
         s_mode = i;
     }
 
+    //camera: now plane?
     public void Change_plane(Vector3 point, Vector3 normal, Vector3 u, Vector3 v)
     {
         nowP.point = point;
@@ -220,6 +282,7 @@ public class Main_code : MonoBehaviour {
 
     }
 
+    //app exit
     public void Exit()
     {
         Application.Quit();

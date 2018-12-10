@@ -10,7 +10,6 @@ public class draw_sketch : MonoBehaviour {
     // mode 1: sketch_rectangle
     // mode 2: circle
     // mode 3: splines
-    int click_count = 0;
 
 
     public Color c1 = Color.green;
@@ -20,8 +19,6 @@ public class draw_sketch : MonoBehaviour {
 
     int segments = 60; //circle segments
 
-    public Text ToWorld;
-
     public Text begin_;
     public Text end_;
 
@@ -29,7 +26,7 @@ public class draw_sketch : MonoBehaviour {
     Main_code feature_info;
     Touch_main touch_info;
 
-    Vector3 temp;
+    line_def temp;
 
 
     // Use this for initialization
@@ -42,17 +39,9 @@ public class draw_sketch : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        ToWorld.GetComponent<Text>();
-
-        var v2 = Input.mousePosition;
-        
-
-        var v3 =Camera.main.ScreenToWorldPoint(new Vector3(v2.x, v2.y,15));
-
-        ToWorld.text = "x=" + v3.x + "y=" + v3.z + "z=" + v3.y + "!!";
-
 
         //if (feature_info.m_mode == 2 && UI_click==0)
+        //drawing mode entering
         if (feature_info.m_mode == 2)
         {
             switch (feature_info.s_mode)
@@ -92,18 +81,22 @@ public class draw_sketch : MonoBehaviour {
                     rend.positionCount = positions.Length;
                     rend.SetPositions(positions);
 
-                    for (int i = 0; i < 4; i++)
-                    {
-                        feature_info.rec[i] = positions[i];
-                    }
+                    temp.type = 0;
+                    temp.center = (start + end) / 2;
 
+                    float mag1 = (positions[1] - positions[0]).magnitude;
+                    float mag2 = (positions[2] - positions[1]).magnitude;
+                    temp.radius.x = mag2 / 2;
+                    temp.radius.y = mag1 / 2;
+
+                    temp.plane = feature_info.nowP;
 
                     break;
                 
                 //circle
                 case 2:
-
-                    if (touch_info.count != 1) return;
+                    /*
+                     if (touch_info.count != 1) return;
 
                     LineRenderer rend2 = GetComponent<LineRenderer>();
                     rend2.material = new Material(Shader.Find("Particles/Additive"));
@@ -132,14 +125,14 @@ public class draw_sketch : MonoBehaviour {
                     radius.x = Vector3.Dot(feature_info.nowP.u, (end - start)) / 2;
                     radius.y = Vector3.Dot(feature_info.nowP.v, (end - start)) / 2;
 
-                    Vector3 temp;
+                    Vector3 temp2;
 
                     float angle = 0.0f;
 
                     for (int i = 0; i < (segments); i++)
                     {
-                        temp = center + Mathf.Cos(Mathf.Deg2Rad * angle) * radius.x * feature_info.nowP.u + Mathf.Sin(Mathf.Deg2Rad * angle) * radius.y * feature_info.nowP.v;
-                        positions[i] = temp;
+                        temp2 = center + Mathf.Cos(Mathf.Deg2Rad * angle) * radius.x * feature_info.nowP.u + Mathf.Sin(Mathf.Deg2Rad * angle) * radius.y * feature_info.nowP.v;
+                        positions[i] = temp2;
 
                         angle += (360f / segments);
                     }
@@ -149,15 +142,16 @@ public class draw_sketch : MonoBehaviour {
 
                     feature_info.cir.center = center;
                     feature_info.cir.radius = radius;
+                     
+                     */
 
-                  
+
 
 
                     break;
 
                 //polygonal
                 case 3:
-                    //var pos3;
 
 
                     break;
@@ -166,6 +160,15 @@ public class draw_sketch : MonoBehaviour {
             }
         }
 
+    }
+
+    public void sketch_export()
+    {
+        if (feature_info.m_mode == 2 && feature_info.s_mode !=0) //not complete
+        {
+            feature_info.line_collect.Add(temp);
+        }
+        
     }
 
     
