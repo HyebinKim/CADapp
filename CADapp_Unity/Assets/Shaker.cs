@@ -17,6 +17,8 @@ public class Shaker : MonoBehaviour
     {
         if (feature_info.m_mode == 2)
         {
+
+
             switch (feature_info.s_mode)
             {
                 case 0: // not selected

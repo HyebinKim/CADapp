@@ -1,6 +1,6 @@
 Android
 PlayerPath?
-C:/Users/helen/Desktop/test15a.apk
+C:/Users/helen/Desktop/test15h.apk
 SceneListBegin?
 Assets/Main_3d.unity
 SceneListEnd?
@@ -167,6 +167,7 @@ e1ea12ca952c81d81a9a21fdf34446ed UnityEngine.HoloLens.dll:UnityEngine.EventSyste
 98d69a140ec0084cde3b6a5e09aea295 UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingCollider
 dfd33ff9ae3ce8d7ca1f22b475ec2387 UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 aac9c55ae7ba4b95b852a7d9c191acd1 Unity.TextMeshPro.dll:TMPro.TextMeshProUGUI
+0a0942f6440fe84b9b96381b58e8e3df Assembly-CSharp.dll:.Shaker
 0a006f3734181ba8b26758f0866152c0 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 00e989e5058c548dd56a85ed4b708f12 Assembly-CSharp.dll:.new_cam
 e04611b8715e6833d2bd7010fc6be10b Unity.TextMeshPro.dll:TMPro.TMP_StyleSheet

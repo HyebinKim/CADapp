@@ -32,8 +32,8 @@ public class GyroControl : MonoBehaviour
         {
             gyro = Input.gyro;
             gyro.enabled = true;
-
-            cameraContainer.transform.rotation = Quaternion.Euler(90f, 90f, 0f);
+            //cameraContainer.transform.rotation = Quaternion.Euler(90f, 90f, 0f);
+            //cameraContainer.transform.rotation = Quaternion.Euler(90f, 90f, 0f);
             rot = new Quaternion(0, 0, 1, 0);
 
             gyroEnabled = true;
@@ -61,9 +61,12 @@ public class GyroControl : MonoBehaviour
         {
             if (gyroEnabled && gyro_on==1)
             {
-                transform.position = refPos;
-                transform.rotation = Quaternion.LookRotation(refRot);
+                
 
+                //transform.position = refPos;
+                //transform.rotation = Quaternion.LookRotation(refRot);
+
+                //transform.rotation = Quaternion.LookRotation(refRot)*gyro.attitude * rot;
                 transform.localRotation = gyro.attitude * rot;
 
                 Camera.main.backgroundColor = Color.gray;
