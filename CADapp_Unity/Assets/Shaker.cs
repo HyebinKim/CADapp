@@ -28,8 +28,12 @@ public class Shaker : MonoBehaviour
                 case 1: //rectangle
                     if (Input.acceleration.x > 0f || Input.acceleration.y > 0f || Input.acceleration.z > 0f)
                     {
-                        feature_info.s_mode = 0;
+                        //feature_info.s_mode = 0;
                         shaking.text = "SHAKING!!!";
+                    }
+                    else
+                    {
+                        shaking.text = "not SHAKING!!!";
                     }
                     break;
 
@@ -37,8 +41,12 @@ public class Shaker : MonoBehaviour
                 case 2:
                     if (Input.acceleration.x > 0f || Input.acceleration.y > 0f || Input.acceleration.z > 0f)
                     {
-                        feature_info.s_mode = 0;
+                        //feature_info.s_mode = 0;
                         shaking.text = "SHAKING!!!";
+                    }
+                    else
+                    {
+                        shaking.text = "not SHAKING!!!";
                     }
                     break;
 
