@@ -20,13 +20,15 @@ public struct circle_def
     public plane_def cir_plane;
 }
 
-public struct feature_def
+public struct solid_def
 {
-    public int type; //0: sketch rec, 1: sketch circle, 2: extrusion, 3: cut extrusion
-    //public int number;
-    public int parent_feature_number;
+    public int type; // 0: extrusion, 1: cut extrusion
+    public string name;
+    
+    public line_def parent;
 
-    public List<int> comp_numb; //type(line/ face)
+    public List<face_def> faces;
+    public Mesh mesh;
     // rec: cube: 6 faces, cylinder: 3 faces
 }
 
@@ -34,6 +36,7 @@ public struct line_def
 {
     //public int number;
     public int type; //0: rec, 1: circle
+    public string name;
 
     public Vector3 center;
     public Vector2 radius; //x=u_radius, y=v_radius
@@ -43,17 +46,19 @@ public struct line_def
 
 public struct face_def
 {
-    public int parent_feature_number;
-    //public int number;
-    public int type; //0: flat rec, 1: flat circle, 2: curve
+    //public int type; //0: flat rec, 1: flat circle, 2: curve
+    //public string name; //name
 
     public plane_def plane;
     //point=center
+    public List<int> triangles;
 
-    public Vector3 center;
-    public Vector2 radius; //x=u_radius, y=v_radius
+    //public Vector3 center;
+    //public Vector2 radius; //x=u_radius, y=v_radius
 
-    public Mesh mesh;
+   // public float length;
+
+   // public Mesh mesh;
 }
 
 public class Main_code : MonoBehaviour {
@@ -125,16 +130,20 @@ public class Main_code : MonoBehaviour {
 
     /// <summary>
     /// data base
-    /// 1. feture
+    /// 1. solid
     /// 2. line: sketch
-    /// 3. face: solid
+    /// 
     /// </summary>
 
-    public List<feature_def> feature_collect;
+    public List<solid_def> solid_collect;
     public List<line_def> line_collect;
-    public List<face_def> face_collect;
 
-    public int selected_num;
+
+
+
+    public int selected_line_num;
+    public int selected_solid_num;
+    public int selected_face_num;
 
     public Text t_feature;
     public Text t_line;
@@ -170,20 +179,22 @@ public class Main_code : MonoBehaviour {
         yz_.onClick.AddListener(delegate { Change_plane(yz.point, yz.normal, yz.u, yz.v); });
         zx_.onClick.AddListener(delegate { Change_plane(zx.point, zx.normal, zx.u, zx.v); });
 
-        feature_collect = new List<feature_def>();
+        solid_collect = new List<solid_def>();
         line_collect = new List<line_def>();
-        face_collect=new List<face_def>();
+ 
 
-        selected_num = -1; //non selected
+        selected_line_num = -1; //non selected
+        selected_solid_num = -1;
+        selected_face_num = -1;
     }
 	
 	// Update is called once per frame
 	void Update () {
 
         
-        t_feature.text = "feature:" + feature_collect.Count;
+        t_feature.text = "solid:" + solid_collect.Count;
         t_line.text = "line:" + line_collect.Count;
-        t_face.text = "face:" + face_collect.Count;
+ 
 
 
         //button activation

@@ -168,6 +168,7 @@ public class draw_sketch : MonoBehaviour {
     {
         if (feature_info.m_mode == 2 && feature_info.s_mode !=0) //not complete
         {
+            temp.name = "sketch" + (feature_info.line_collect.Count+1);
             feature_info.line_collect.Add(temp);
         }
         

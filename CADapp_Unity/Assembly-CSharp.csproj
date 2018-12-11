@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\GyroControl.cs" />
+     <Compile Include="Assets\picking.cs" />
      <Compile Include="Assets\Scripts\create_solid.cs" />
      <Compile Include="Assets\Scripts\draw_sketch.cs" />
      <Compile Include="Assets\Scripts\Main_code.cs" />
