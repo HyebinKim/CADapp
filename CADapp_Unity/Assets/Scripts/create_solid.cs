@@ -40,12 +40,14 @@ public class create_solid : MonoBehaviour
     //parameter
     public float length=0.0f;
     float length_save = 0.0f;
-    public int direct = 1;
+    //public int direct = 1;
 
     public Text text_length;
 
     //feature info
     solid_def temp;
+
+    public Text info;
 
 
     void Start()
@@ -69,7 +71,6 @@ public class create_solid : MonoBehaviour
             {
                 feature_info.selected_line_num = 0; //첫번째 라인 선택.
             }
-            
 
             switch (feature_info.s_mode)
             {
@@ -77,6 +78,8 @@ public class create_solid : MonoBehaviour
                     text_length.text = "";
                     break;
                 case 1: //extrusion
+
+                    info.text = "extrusion";
 
                     //input: parent, direct, length
 
@@ -92,24 +95,24 @@ public class create_solid : MonoBehaviour
                         }
 
                         //mesh generation
-
                         temp.type = 0;
                         temp.parent = feature_info.line_collect[0];  //수정 필요.
 
-
-                        Filter.sharedMesh = Build(temp.parent, length, temp.faces);
+                        Filter.sharedMesh = Build(temp.parent, length, temp.faces); 
                         temp.mesh= Build(temp.parent, length, temp.faces);
 
-                        //Filter.sharedMesh = Build(feature_info.line_collect.Count-1); //제일 마지막꺼
+                        info.text = "v:" + temp.mesh.vertices.Length + " uv:" + temp.mesh.uv.Length + "  n:" + temp.mesh.normals.Length + "  t:" + temp.mesh.triangles.Length;
                     }
-
-                    //Filter.sharedMesh = Build(feature_info.line_collect[0]); //mesh 반환
 
                     break;
                 case 2: //cut extrusion
                     text_length.text = "Length=";
 
+                    if (feature_info.solid_collect.Count > 0 && feature_info.line_collect.Count > 0) //수정 필요.
+                    {
+                        temp.type = 1;
 
+                    }
                     break;
                 default:
                     text_length.text = "";
@@ -134,7 +137,7 @@ public class create_solid : MonoBehaviour
         var triangles = new List<int>();
 
         top_bottom(parent, length, vertices, uvs, normals, triangles, faces);
-        side(parent, length, vertices, uvs, normals, triangles, faces);
+        //side(parent, length, vertices, uvs, normals, triangles, faces);
 
         //create top, bottom face: GenerateCap
         //GenerateCap(vertices, uvs, normals, triangles);
@@ -145,6 +148,8 @@ public class create_solid : MonoBehaviour
 
         //total mesh
 
+        info.text="v:"+vertices.Count+" uv:"+uvs.Count+"  n:"+normals.Count+"  t:"+triangles.Count;
+
         mesh.vertices = vertices.ToArray();
         mesh.uv = uvs.ToArray();
         mesh.normals = normals.ToArray();
@@ -154,189 +159,190 @@ public class create_solid : MonoBehaviour
         return mesh;
     }
 
-    void top_bottom(line_def sketch, float length, List<Vector3> vertices, List<Vector2> uvs, List<Vector3> normals, List<int> triangles, List<face_def> faces)
+    void bottom(line_def sketch, float length, List<Vector3> vertices, List<Vector2> uvs, List<Vector3> normals, List<int> triangles, List<face_def> faces)
     {
-        //vertices and uv.
         Vector3[] pos = calculate_position(sketch);
-        int direct = 1;
-        if (length >= 0) direct = 1;
-        else direct = -1;
 
-        for (int j = 0; j < 2; j++)
+        vertices.Add(sketch.center);
+        uvs.Add(new Vector2(0.5f, 0.5f));
+        normals.Add(-sketch.plane.normal);
+
+        for (int i = 0; i < 4; i++)
         {
-            Vector3 add = sketch.plane.normal * length * j;
-
-            //center information
-            vertices.Add(sketch.center + add);
-            uvs.Add(new Vector2(0.5f, 0.5f));
-            normals.Add(sketch.plane.normal * direct * (-1));
-
-            //segments information
-            for (int i = 0; i < pos.Length; i++)
-            {
-                vertices.Add(pos[i] + add);
-                if (sketch.type == 1) //circle
-                {
-                    uvs.Add(new Vector2((float)i / (pos.Length - 1), (float)j));
-                }
-
-                normals.Add(sketch.plane.normal * direct * (-1));
-
-            }
-
-            if (sketch.type == 0) //rectangle
-            {
-                uvs.Add(new Vector2(0.0f, 0.0f));
-                uvs.Add(new Vector2(1.0f, 0.0f));
-                uvs.Add(new Vector2(1.0f, 1.0f));
-                uvs.Add(new Vector2(0.0f, 1.0f));
-            }
-
-            direct = direct * (-1);
-
+            vertices.Add(pos[i]);
+            normals.Add(-sketch.plane.normal);
         }
+        uvs.Add(new Vector2(0.0f, 0.0f));
+        uvs.Add(new Vector2(1.0f, 0.0f));
+        uvs.Add(new Vector2(1.0f, 1.0f));
+        uvs.Add(new Vector2(0.0f, 1.0f));
 
-        if (length >= 0) direct = 1;
-        else direct = -1;
-
-        //bottom mesh
-        face_def bottom = new face_def();
-        bottom.plane = sketch.plane;
-        //normal change
-        if (direct == 1) {
-            bottom.plane.normal *= (-1);
-            for (int i = 0; i < pos.Length; i++)
-            {
-                triangles.Add(0); //bottom center
-                bottom.triangles.Add(0);
-
-                if (i + 1 == pos.Length)
-                {
-                    triangles.Add(0 + 1);
-                    bottom.triangles.Add(0 + 1);
-                }
-                else
-                {
-                    triangles.Add(i + 2);
-                    bottom.triangles.Add(i + 2);
-                }
-                triangles.Add(i + 1);
-                bottom.triangles.Add(i + 1);
-
-                
-            }
-        }
-        else
-        {
-            for (int i = 0; i < pos.Length; i++)
-            {
-                triangles.Add(0); //bottom center
-                bottom.triangles.Add(0);
-
-                triangles.Add(i + 1);
-                bottom.triangles.Add(i + 1);
-
-                if (i + 1 == pos.Length)
-                {
-                    triangles.Add(0 + 1);
-                    bottom.triangles.Add(0 + 1);
-                }
-                else
-                {
-                    triangles.Add(i + 2);
-                    bottom.triangles.Add(i + 2);
-                }
-
-            }
-        }
-        faces.Add(bottom);
-
-        //top mesh
-        face_def top = new face_def();
-        top.plane = sketch.plane;
-        int initial = pos.Length +1;
-        if (direct == 1)
-        {
-            
-            for (int i = initial; i < initial+pos.Length; i++)
-            {
-                triangles.Add(initial); //bottom center
-                top.triangles.Add(initial);
-
-                triangles.Add(i + 1);
-                top.triangles.Add(i + 1);
-
-                if (i + 1 == initial + pos.Length)
-                {
-                    triangles.Add(initial + 1);
-                    top.triangles.Add(initial + 1);
-                }
-                else
-                {
-                    triangles.Add(i + 2);
-                    top.triangles.Add(i + 2);
-                }
-
-            }
-        }
-        else
-        {
-            top.plane.normal *= (-1);
-            for (int i = 0; i < pos.Length; i++)
-            {
-                triangles.Add(initial); //bottom center
-                top.triangles.Add(initial);
-
-                if (i + 1 == initial + pos.Length)
-                {
-                    triangles.Add(initial + 1);
-                    top.triangles.Add(initial + 1);
-                }
-                else
-                {
-                    triangles.Add(i + 2);
-                    top.triangles.Add(i + 2);
-                }
-                triangles.Add(i + 1);
-                top.triangles.Add(i + 1);
-
-            }
-        }
-        faces.Add(top);
+        triangles.Add(0); triangles.Add(1); triangles.Add(2);
+        triangles.Add(0); triangles.Add(2); triangles.Add(3); 
+        triangles.Add(0); triangles.Add(3); triangles.Add(4); 
+        triangles.Add(0); triangles.Add(4); triangles.Add(1); 
 
         return;
     }
 
-    void side(line_def sketch, float length, List<Vector3> vertices, List<Vector2> uvs, List<Vector3> normals, List<int> triangles, List<face_def> faces)
+    void top_bottom(line_def sketch, float length, List<Vector3> vertices, List<Vector2> uvs, List<Vector3> normals, List<int> triangles, List<face_def> faces)
     {
+        int current = 0;
+
+        //vertices and uv.
+        Vector3[] pos = calculate_position(sketch);
+        int direct = 1; //positive
+        if (length < 0) direct = -1; //negative
+
+        //bottom
+
+        vertices.Add(sketch.center);
+        uvs.Add(new Vector2(0.5f, 0.5f));
+        normals.Add(-direct* sketch.plane.normal);
+        //normals.Add(-sketch.plane.normal);
+
+        for (int i = 0; i < pos.Length; i++)
+        {
+            vertices.Add(pos[i]);
+            uvs.Add(new Vector2(0.0f, 0.0f));
+            normals.Add(-direct * sketch.plane.normal);
+            //normals.Add(-sketch.plane.normal);
+
+        }
+
         
 
-        //vertices and uv, normals
+        // face_def bottom = new face_def();
+        // bottom.plane = sketch.plane;
+        //  bottom.plane.normal *= -direct;
+
+        for (int i = 0; i < pos.Length; i++)
+        {
+            if (direct == 1)
+            {
+                triangles.Add(0); //bottom center
+                //bottom.triangles.Add(0);
+
+                triangles.Add(i + 1);
+                //bottom.triangles.Add(i+1);
+
+                if (i + 1 == pos.Length)
+                {
+                    triangles.Add(0 + 1);
+                    //bottom.triangles.Add(0 + 1);
+                }
+                else
+                {
+                    triangles.Add(i + 2);
+                    //bottom.triangles.Add(i + 2);
+                }
+            }
+            else
+            {
+                triangles.Add(0); //bottom center
+                //bottom.triangles.Add(0);
+
+                if (i + 1 == pos.Length)
+                {
+                    triangles.Add(0 + 1);
+                    //bottom.triangles.Add(0 + 1);
+                }
+                else
+                {
+                    triangles.Add(i + 2);
+                   // bottom.triangles.Add(i + 2);
+                }
+
+                triangles.Add(i + 1);
+                //bottom.triangles.Add(i+1);
+
+            }
+
+
+
+
+        }
+
+        //faces.Add(bottom);
+
+        current = vertices.Count;
+
+        //top
+        Vector3 add = sketch.plane.normal * length;
+        vertices.Add(sketch.center+add);
+        uvs.Add(new Vector2(0.5f, 0.5f));
+        normals.Add(direct * sketch.plane.normal);
+
+        for (int i = 0; i < pos.Length; i++)
+        {
+            vertices.Add(pos[i]+add);
+            uvs.Add(new Vector2(0.0f, 0.0f));
+            normals.Add(direct * sketch.plane.normal);
+
+        }
+
+        for (int i = 0+ current; i < pos.Length+ current; i++)
+        {
+            if (direct == 1)
+            {
+                triangles.Add(current); //top center
+                
+
+                if (i + 1 == pos.Length+ current)
+                {
+                    triangles.Add(current + 1);
+                }
+                else
+                {
+                    triangles.Add(i + 2);
+                }
+
+                triangles.Add(i + 1);
+            }
+            else
+            {
+                triangles.Add(current); //top center
+                triangles.Add(i + 1);
+
+                if (i + 1 == pos.Length+ current)
+                {
+                    triangles.Add(current + 1);
+                }
+                else
+                {
+                    triangles.Add(i + 2);
+                }
+
+            }
+        }
+
+        return;
+    }
+
+    void side(line_def sketch, float length, List<Vector3> vertices, List<Vector2> uvs, List<Vector3> normals, List<int> triangles)
+    {
         Vector3[] pos = calculate_position(sketch);
-        int direct = 1;
-        if (length >= 0) direct = 1;
-        else direct = -1;
+        int direct = 1; //positive
+        if (length < 0) direct = -1; //negative
 
         int current = vertices.Count; //until top, bottom
         Vector3 add = sketch.plane.normal * length ;
+
+    
         for (int i = 0; i < pos.Length; i++)
         {
-            face_def side = new face_def();
+           
             //normals
             Vector3 tot_normal;
             if (i + 1 == pos.Length)
             {
                 tot_normal = Vector3.Normalize(Vector3.Cross((pos[i] + add) - pos[i], pos[0] - pos[i]));
-                side.plane.point = (pos[i] + pos[0] + add) / 2;
-                side.plane.u = Vector3.Normalize(pos[0] - pos[i]);
-                side.plane.v = Vector3.Normalize(add);
+               
             }
             else
             {
                 tot_normal = Vector3.Normalize(Vector3.Cross((pos[i] + add) - pos[i], pos[i + 1] - pos[i]));
-                side.plane.point = (pos[i] + pos[i + 1] + add) / 2;
-                side.plane.u = Vector3.Normalize(pos[i+1]- pos[i]);
-                side.plane.v= Vector3.Normalize(add);
+              
             }
 
 
@@ -396,7 +402,7 @@ public class create_solid : MonoBehaviour
             normals.Add(tot_normal);
 
             //side mesh and triangles
-            side.plane.normal = tot_normal;
+           
             triangles.Add(current +i*4);
             triangles.Add(current +1 + i * 4);
             triangles.Add(current + 3 + i * 4);
@@ -404,16 +410,6 @@ public class create_solid : MonoBehaviour
             triangles.Add(current + 1 + i * 4);
             triangles.Add(current + 2 + i * 4);
             triangles.Add(current + 3 + i * 4);
-
-            side.triangles.Add(current + i * 4);
-            side.triangles.Add(current + 1 + i * 4);
-            side.triangles.Add(current + 3 + i * 4);
-
-            side.triangles.Add(current + 1 + i * 4);
-            side.triangles.Add(current + 2 + i * 4);
-            side.triangles.Add(current + 3 + i * 4);
-
-            faces.Add(side);
 
         }
 
@@ -866,9 +862,6 @@ public class create_solid : MonoBehaviour
          
          */
 
-
-
-
     Vector3[] calculate_position(line_def sketch)
     {
       
@@ -877,10 +870,10 @@ public class create_solid : MonoBehaviour
         {
             pos = new Vector3[4];
 
-            pos[0] = sketch.center + sketch.plane.u * sketch.radius.x + sketch.plane.v * sketch.radius.y;
-            pos[1] = sketch.center - sketch.plane.u * sketch.radius.x + sketch.plane.v * sketch.radius.y;
-            pos[2] = sketch.center - sketch.plane.u * sketch.radius.x - sketch.plane.v * sketch.radius.y;
-            pos[3] = sketch.center + sketch.plane.u * sketch.radius.x - sketch.plane.v * sketch.radius.y;
+            pos[0] = sketch.center - sketch.plane.u * sketch.radius.x + sketch.plane.v * sketch.radius.y;
+            pos[1] = sketch.center - sketch.plane.u * sketch.radius.x - sketch.plane.v * sketch.radius.y;
+            pos[2] = sketch.center + sketch.plane.u * sketch.radius.x - sketch.plane.v * sketch.radius.y;
+            pos[3] = sketch.center + sketch.plane.u * sketch.radius.x + sketch.plane.v * sketch.radius.y;
 
         }
         else //circle: sketch.type == 1
@@ -895,7 +888,7 @@ public class create_solid : MonoBehaviour
             for (int i = 0; i < (segments); i++)
             {
                 temp = sketch.center + Mathf.Cos(Mathf.Deg2Rad * angle) * sketch.radius.x * sketch.plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * sketch.radius.y * sketch.plane.v;
-                pos[i] = temp;
+                pos[segments-i-1] = temp;
 
                 angle += (360f / segments);
             }

@@ -558,6 +558,7 @@ MonoBehaviour:
   length: 2
   direct: 1
   text_length: {fileID: 397411927}
+  info: {fileID: 8800552}
 --- !u!1 &265677946
 GameObject:
   m_ObjectHideFlags: 0

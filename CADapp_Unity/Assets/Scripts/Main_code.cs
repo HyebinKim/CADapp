@@ -194,8 +194,6 @@ public class Main_code : MonoBehaviour {
         
         t_feature.text = "solid:" + solid_collect.Count;
         t_line.text = "line:" + line_collect.Count;
- 
-
 
         //button activation
         switch (m_mode)
