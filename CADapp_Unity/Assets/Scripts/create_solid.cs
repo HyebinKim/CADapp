@@ -83,7 +83,12 @@ public class create_solid : MonoBehaviour
                         direct = -1;
                     }
 
-                    Filter.sharedMesh = Build(0); //mesh 반환
+                    if (feature_info.line_collect.Count > 0)
+                    {
+                        Filter.sharedMesh = Build(feature_info.line_collect.Count-1); //제일 마지막꺼
+                    }
+
+                    //Filter.sharedMesh = Build(feature_info.line_collect[0]); //mesh 반환
 
                     if (touch_info.touch1 == 1)
                     {
@@ -117,6 +122,20 @@ public class create_solid : MonoBehaviour
         var normals = new List<Vector3>();
         var uvs = new List<Vector2>();
         var triangles = new List<int>();
+
+        line_def current = feature_info.line_collect[parent];
+
+        if (current.type == 0) //rectangle
+        {
+            int f_num = 6;
+
+        }
+        else //circle
+        {
+            int f_num2 = 3;
+
+
+        }
 
         //create top, bottom face: GenerateCap
         GenerateCap(vertices, uvs, normals, triangles);

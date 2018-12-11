@@ -8,10 +8,16 @@ public class main_display : MonoBehaviour {
     int segments = 60;
 
     public GameObject sketchs;
-    List<LineRenderer> rend_collect;
+    public GameObject copy_one;
+    List<LineRenderer> rend_collect; //line renderer collection
 
     int active_mode;
     int current_number;
+
+    GameObject temp2;
+
+    List<GameObject> lines;
+    LineRenderer lr;
 
     // Use this for initialization
     void Start()
@@ -21,6 +27,8 @@ public class main_display : MonoBehaviour {
         feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
         active_mode = 0; // not changing
         current_number = 0;
+
+        lines = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -30,7 +38,8 @@ public class main_display : MonoBehaviour {
 
         //line drawing
 
-        rend_collect = new List<LineRenderer>();
+        /*
+         rend_collect = new List<LineRenderer>();
 
         if (feature_info.line_collect.Count > 0)
         {
@@ -57,29 +66,60 @@ public class main_display : MonoBehaviour {
             }
             //LineRenderer rend = GetComponent<LineRenderer>();
         }
+         
+         
+         */
 
-        if(current_number != feature_info.line_collect.Count && current_number >0)
+        if (current_number != feature_info.line_collect.Count && current_number >0)
         {
-            for (int i = 0; i < feature_info.line_collect.Count; i++)
-            {
-                GameObject temp2 = Instantiate(sketchs);
-                LineRenderer rend2 = temp2.GetComponent<LineRenderer>();
-                rend2.enabled = true;
-                rend2.material = new Material(Shader.Find("Particles/Additive"));
+           // for (int i = 0; i < feature_info.line_collect.Count; i++)
+           // {
+                lines[current_number] = new GameObject();
+                lines[current_number].name = "sketch" + current_number;
 
-                rend2.startColor = Color.white;
-                rend2.endColor = Color.white;
-                rend2.startWidth = 0.1f;
-                rend2.endWidth = 0.1f;
+                lines[current_number].AddComponent<LineRenderer>();
+                lr = lines[current_number].GetComponent<LineRenderer>();
 
-                rend2.loop = true;
+                lr.enabled = true;
+                lr.material = new Material(Shader.Find("Particles/Additive"));
+                lr.startColor = Color.white;
+                lr.endColor = Color.white;
+                lr.startWidth = 0.1f;
+                lr.endWidth = 0.1f;
+                lr.loop = true;
 
-                Vector3[] positions = calculate_position(feature_info.line_collect[0]);
+                Vector3[] positions = calculate_position(feature_info.line_collect[current_number]);
 
-                rend2.positionCount = positions.Length;
-                rend2.SetPositions(positions);
-            }
-               
+                lr.positionCount = positions.Length;
+                lr.SetPositions(positions);
+
+                GameObject temp3 = Instantiate(copy_one);
+                LineRenderer rend3 = temp3.GetComponent<LineRenderer>();
+
+                rend3.loop = false;
+                rend3.startWidth = rend3.startWidth * 10*(1+ current_number);
+            /*
+
+              temp2 = Instantiate(sketchs);
+            LineRenderer rend2 = temp2.GetComponent<LineRenderer>();
+            rend2.enabled = true;
+            rend2.material = new Material(Shader.Find("Particles/Additive"));
+
+            rend2.startColor = Color.white;
+            rend2.endColor = Color.white;
+            rend2.startWidth = 0.1f;
+            rend2.endWidth = 0.1f;
+
+            rend2.loop = true;
+
+            Vector3[] positions = calculate_position(feature_info.line_collect[i]);
+
+            rend2.positionCount = positions.Length;
+            rend2.SetPositions(positions);
+             */
+
+            //}
+
 
             //rend2.SetPositions(rend_collect[feature_info.line_collect.Count - 1].G)
             //rend2 =rend_collect[feature_info.line_collect.Count-1];
@@ -236,9 +276,38 @@ public class main_display : MonoBehaviour {
         {
             pos = new Vector3[segments];
 
+            Vector3 temp;
+
+            float angle = 0.0f;
+
+            for (int i = 0; i < (segments); i++)
+            {
+                temp = sketch.center + Mathf.Cos(Mathf.Deg2Rad * angle) * sketch.radius.x * sketch.plane.u + Mathf.Sin(Mathf.Deg2Rad * angle) * sketch.radius.y * sketch.plane.v;
+                pos[i] = temp;
+
+                angle += (360f / segments);
+            }
         }
 
         return pos;
+    }
+
+    public void new_line()
+    {
+        if (feature_info.m_mode == 2)
+        {
+            GameObject temp4 = (GameObject)Instantiate(sketchs);
+            LineRenderer lr = temp4.GetComponent<LineRenderer>();
+
+            lr.startColor = Color.white;
+            lr.endColor = Color.white;
+
+            Vector3[] positions = calculate_position(feature_info.line_collect[feature_info.line_collect.Count-1]);
+
+            lr.positionCount = positions.Length;
+            lr.SetPositions(positions);
+
+        }
     }
 
 }

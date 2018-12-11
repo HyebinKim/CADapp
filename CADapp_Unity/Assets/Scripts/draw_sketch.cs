@@ -47,7 +47,9 @@ public class draw_sketch : MonoBehaviour {
             switch (feature_info.s_mode)
             {
                 case 0: // not selected
-                    
+                    LineRenderer rend3 = GetComponent<LineRenderer>();
+                    rend3.positionCount = 0;
+
                     break;
 
                 case 1: //rectangle
@@ -142,8 +144,6 @@ public class draw_sketch : MonoBehaviour {
                     temp.type = 1;
                     temp.center = center;
 
-                    float mag3 = (positions[1] - positions[0]).magnitude;
-                    float mag4 = (positions[2] - positions[1]).magnitude;
                     temp.radius.x = radius.x;
                     temp.radius.y = radius.y;
 

@@ -18,39 +18,25 @@ public class Shaker : MonoBehaviour
         if (feature_info.m_mode == 2)
         {
 
-
-            switch (feature_info.s_mode)
+            if(feature_info.s_mode != 0)
             {
-                case 0: // not selected
-                    
-                    break;
-
-                case 1: //rectangle
-                    if (Input.acceleration.x > 0f || Input.acceleration.y > 0f || Input.acceleration.z > 0f)
-                    {
-                        //feature_info.s_mode = 0;
-                        shaking.text = "SHAKING!!!";
-                    }
-                    else
-                    {
-                        shaking.text = "not SHAKING!!!";
-                    }
-                    break;
-
-                //circle
-                case 2:
-                    if (Input.acceleration.x > 0f || Input.acceleration.y > 0f || Input.acceleration.z > 0f)
-                    {
-                        //feature_info.s_mode = 0;
-                        shaking.text = "SHAKING!!!";
-                    }
-                    else
-                    {
-                        shaking.text = "not SHAKING!!!";
-                    }
-                    break;
-
+                if (Input.acceleration.sqrMagnitude > 5f)
+                {
+                    feature_info.s_mode = 0;
+                    shaking.text = "SHAKING!!!";
+                }
+                else
+                {
+                    shaking.text = "not SHAKING!!!";
+                }
             }
+            else
+            {
+                shaking.text = "not SHAKING!!!";
+            }
+
+
+            
         }
     }
 }

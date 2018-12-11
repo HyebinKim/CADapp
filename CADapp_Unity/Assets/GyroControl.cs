@@ -18,13 +18,17 @@ public class GyroControl : MonoBehaviour
     Vector3 refPos;
     Vector3 refRot;
 
+    private float initialOrientationX;
+    private float initialOrientationY;
+    private float initialOrientationZ;
+
     private void Start()
     {
         feature_info = GameObject.Find("MainUI").GetComponent<Main_code>();
 
         cameraContainer = new GameObject("Camera Container");
         cameraContainer.transform.position = transform.position;
-        transform.SetParent(cameraContainer.transform);
+        //transform.SetParent(cameraContainer.transform);
 
         //gyroEnabled = EnableGyro();
 
@@ -34,9 +38,11 @@ public class GyroControl : MonoBehaviour
             gyro.enabled = true;
             //cameraContainer.transform.rotation = Quaternion.Euler(90f, 90f, 0f);
             //cameraContainer.transform.rotation = Quaternion.Euler(90f, 90f, 0f);
-            rot = new Quaternion(0, 0, 1, 0);
-
-            gyroEnabled = true;
+            //rot = new Quaternion(0, 0, 1, 0);
+            initialOrientationX = Input.gyro.rotationRateUnbiased.x;
+            initialOrientationY = Input.gyro.rotationRateUnbiased.y;
+            initialOrientationZ = -Input.gyro.rotationRateUnbiased.z;
+            //gyroEnabled = true;
         }
         else
         {
@@ -59,16 +65,17 @@ public class GyroControl : MonoBehaviour
     {
         if (feature_info.m_mode == 0)
         {
-            if (gyroEnabled && gyro_on==1)
+            if (gyroEnabled && gyro_on == 1)
 
             {
-                
+
 
                 //transform.position = refPos;
                 //transform.rotation = Quaternion.LookRotation(refRot);
-
+                //rot = new Quaternion(0, 0, 1, 0);
                 //transform.rotation = Quaternion.LookRotation(refRot)*gyro.attitude * rot;
-                transform.localRotation = gyro.attitude * rot;
+                //transform.localRotation = gyro.attitude * rot;
+                transform.Rotate(initialOrientationX - Input.gyro.rotationRateUnbiased.x, initialOrientationY - Input.gyro.rotationRateUnbiased.y, initialOrientationZ + Input.gyro.rotationRateUnbiased.z);
 
                 Camera.main.backgroundColor = Color.gray;
             }
@@ -81,6 +88,6 @@ public class GyroControl : MonoBehaviour
         {
             Camera.main.backgroundColor = Color.black;
         }
-        
+
     }
 }
