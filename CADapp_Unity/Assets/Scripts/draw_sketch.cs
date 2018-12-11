@@ -95,7 +95,7 @@ public class draw_sketch : MonoBehaviour {
                 
                 //circle
                 case 2:
-                    /*
+                    
                      if (touch_info.count != 1) return;
 
                     LineRenderer rend2 = GetComponent<LineRenderer>();
@@ -111,8 +111,6 @@ public class draw_sketch : MonoBehaviour {
 
                     Vector3 center = new Vector3(0f, 0f, 0f);
                     Vector2 radius = new Vector2(0f, 0f);
-
-                    feature_info.cir.cir_plane = feature_info.nowP;
 
                     start = Camera.main.ScreenToWorldPoint(new Vector3(touch_info.begin1.x, touch_info.begin1.y, 15));
                     end = Camera.main.ScreenToWorldPoint(new Vector3(touch_info.end1.x, touch_info.end1.y, 15));
@@ -140,12 +138,16 @@ public class draw_sketch : MonoBehaviour {
                     rend2.positionCount = positions.Length;
                     rend2.SetPositions(positions);
 
-                    feature_info.cir.center = center;
-                    feature_info.cir.radius = radius;
-                     
-                     */
 
+                    temp.type = 1;
+                    temp.center = center;
 
+                    float mag3 = (positions[1] - positions[0]).magnitude;
+                    float mag4 = (positions[2] - positions[1]).magnitude;
+                    temp.radius.x = radius.x;
+                    temp.radius.y = radius.y;
+
+                    temp.plane = feature_info.nowP;
 
 
                     break;

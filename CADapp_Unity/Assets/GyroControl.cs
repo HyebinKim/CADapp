@@ -60,6 +60,7 @@ public class GyroControl : MonoBehaviour
         if (feature_info.m_mode == 0)
         {
             if (gyroEnabled && gyro_on==1)
+
             {
                 
 
